@@ -16,7 +16,7 @@ public class Job {
 
     private String department;
 
-    @Column(name="user_id")
+    @Column(name="listing_title")
     private String listingTitle;
 
     @Column(name="date_listed",nullable = false, updatable = false)
@@ -52,7 +52,7 @@ public class Job {
     public Long getId() {
         return id;
     }
-
+// TODO DO WE NEED TO BE ABLE ABLE TO SET ID AND USER_ID?? 
     public void setId(Long id) {
         this.id = id;
     }
