@@ -1,61 +1,58 @@
 package com.adp.domain;
 
+import jakarta.persistence.*;
+
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+@Entity
+@Table(name="JOB")
 public class Job {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name="user_id")
     private Long userId;
     private String department;
+    @Column(name="user_id")
     private String listingTitle;
+    @Column(name="date_listed",nullable = false, updatable = false)
     private Instant dateListed;
+    @Column(name="date_closed",nullable = false, updatable = false)
     private Instant dateClosed;
+    @Column(name="job_title")
     private String jobTitle;
+    @Column(name="job_description")
     private String jobDescription;
+    @Column(name="additional_information")
     private String additionalInformation;
+    @Column(name="listing_status")
     private String listingStatus;
+    @Column(name="experience_level")
     private String experienceLevel;
+    @Column(name="model_resume")
     private String modelResume;
+    @Column(name="model_cover_letter")
     private String modelCoverLetter;
 
-    // Constructor
-    public Job() {}
-
-    public Job(int id, Integer userId, String department, String listingTitle, Timestamp dateListed,
-               Timestamp dateClosed, String jobTitle, String jobDescription,
-               String additionalInformation, String listingStatus, String experienceLevel,
-               String modelResume, String modelCoverLetter) {
-        this.id = id;
-        this.userId = userId;
-        this.department = department;
-        this.listingTitle = listingTitle;
-        this.dateListed = dateListed;
-        this.dateClosed = dateClosed;
-        this.jobTitle = jobTitle;
-        this.jobDescription = jobDescription;
-        this.additionalInformation = additionalInformation;
-        this.listingStatus = listingStatus;
-        this.experienceLevel = experienceLevel;
-        this.modelResume = modelResume;
-        this.modelCoverLetter = modelCoverLetter;
-    }
 
     // Getters and Setters
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -75,20 +72,12 @@ public class Job {
         this.listingTitle = listingTitle;
     }
 
-    public Timestamp getDateListed() {
+    public Instant getDateListed() {
         return dateListed;
     }
 
-    public void setDateListed(Timestamp dateListed) {
-        this.dateListed = dateListed;
-    }
-
-    public Timestamp getDateClosed() {
+    public Instant getDateClosed() {
         return dateClosed;
-    }
-
-    public void setDateClosed(Timestamp dateClosed) {
-        this.dateClosed = dateClosed;
     }
 
     public String getJobTitle() {
@@ -145,3 +134,6 @@ public class Job {
 
     public void setModelCoverLetter(String modelCoverLetter) {
         this.modelCoverLetter = modelCoverLetter;
+    }
+
+}
