@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adp.domain.Customer;
 import com.adp.domain.Job;
 import com.adp.service.JobService;
 
@@ -46,16 +47,17 @@ public class JobController {
     }
 
     @PutMapping("/{cust-id}")
-    public ResponseEntity<?> putJob(@PathVariable("cust-id") long id, @RequestBody Customer customer) {
-
-        //return error when trying to update a customer that doesnt exist
-        Optional<Customer> optionalCustomer = customerService.getCustomer(id);
-        if (optionalCustomer.isEmpty() || customer.getId() != id || !isCustomerValid(customer)) {
-            return ResponseEntity.badRequest().body("Bad Request");
-        }
-        customerService.saveCustomer(customer);
-        return ResponseEntity.ok(customer);
+  public ResponseEntity<?> updateJob(@PathVariable("cust-id") long id, @RequestBody Job job) {
+    
+    //return error when trying to update a job that doesnt exist
+    Optional<Job> optionalJob = jobService.getJob(id);
+    if (optionalJob.isEmpty() || job.getId() != id || !isJobValid(job)) {
+      return ResponseEntity.badRequest().body("Bad Request");
     }
+    jobService.saveJob(job);
+    return ResponseEntity.ok(job);
+  }
+
 
     @DeleteMapping("/{cust-id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("cust-id") long id) {
@@ -67,7 +69,8 @@ public class JobController {
         return ResponseEntity.notFound().build();
     }
 
-    private boolean isCustomerValid(Customer customer) {
-        return customer.getName() != null && customer.getEmail() != null && customer.getPassword() != null;
-    }
+    private boolean isJobValid(Job job) {
+        return job.getListingTitle() != null && job.getDateListed() != null && job.getListingStatus() != null;
+      }
+    
 }
