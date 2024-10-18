@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 import com.adp.domain.Job;
 
-public interface JobRepository extends CrudRepository<Customer, Long>{
+public interface JobRepository extends CrudRepository<Job, Long>{
 }
