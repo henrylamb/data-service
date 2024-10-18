@@ -3,16 +3,17 @@ package com.adp.service;
 import java.net.URI;
 import java.util.Optional;
 
+import com.adp.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.adp.domain.Job;
-import com.adp.repository.JobRepository;
 
 @Service
 public class JobService{
-    @Autowired JobRepository repo;
+    @Autowired
+    JobRepository repo;
 
     public Iterable<Job> getAll(){
         return repo.findAll();

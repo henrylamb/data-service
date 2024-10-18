@@ -19,7 +19,7 @@ import com.adp.domain.Job;
 import com.adp.service.JobService;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/job")
 public class JobController {
 
     @Autowired
