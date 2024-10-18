@@ -21,8 +21,8 @@ CREATE TABLE job (
 -- Create an Application table
 CREATE TABLE `application` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `user_email` varchar(255) DEFAULT NULL,
+  `candidate_id` int DEFAULT NULL,
+  `candidate_email` varchar(255) DEFAULT NULL,
   `job_id` int DEFAULT NULL,
   `date_applied` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `cover_letter` text,
