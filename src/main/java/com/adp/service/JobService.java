@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.adp.domain.Job;
-import com.adp.repository.CustomerRepository;
 
 @Service
 public class JobService{
