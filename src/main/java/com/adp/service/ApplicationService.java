@@ -10,11 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationService {
     @Autowired
-    ApplicationRepository repo;
+    public ApplicationRepository repo;
 
-    public Iterable<Application> getAll(){
-        return repo.findAll();
-    }
 
 
     public Application getApplication(long id) {
