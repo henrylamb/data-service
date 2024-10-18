@@ -29,10 +29,13 @@ public class JobController {
         return jobService.getAll();
     }
 
-    @GetMapping("/{cust-id}")
+    @GetMapping("/{id}")
     public Optional<Job> getJob(@PathVariable long id) {
         return jobService.getJob(id);
     }
+
+    // TODO /job/{id}/filter={filter}
+    // TODO GET /job/page?={page}&items?={items}
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {

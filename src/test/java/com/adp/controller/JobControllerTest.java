@@ -61,9 +61,9 @@ public class JobControllerTest {
   public void testGetAll() throws Exception {
     // Arrange 
     // Create two jobs
-    Job job1 = createMockJob(1L, "Department 1", "Listing Title 1", "Job Title 1", "Job Description 1", "Additional Information 1", "Listing Status 1", "Experience Level 1", "Model Resume 1", "Model Cover Letter 1");
+    Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-    Job job2 = createMockJob(2L, "Department 2", "Listing Title 2", "Job Title 2", "Job Description 2", "Additional Information 2", "Listing Status 2", "Experience Level 2", "Model Resume 2", "Model Cover Letter 2");
+    Job job2 = createMockJob(2L, "Engineering", "Backend Developer", "Java Developer", "Develop scalable backend services using Java, Spring Boot, and MySQL.", "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open", "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
 
     // Mock what the service should do 
     when(jobService.getAll())
@@ -72,7 +72,8 @@ public class JobControllerTest {
     // Assert
     mockMvc.perform(get("/job"))
         .andExpect(status().isOk())
-        .andExpect(content().json("[{'id':1,'department':'Department 1','listingTitle':'Listing Title 1','jobTitle':'Job Title 1','jobDescription':'Job Description 1','additionalInformation':'Additional Information 1','listingStatus':'Listing Status 1','experienceLevel':'Experience Level 1','modelResume':'Model Resume 1','modelCoverLetter':'Model Cover Letter 1'},{'id':2,'department':'Department 2','listingTitle':'Listing Title 2','jobTitle':'Job Title 2','jobDescription':'Job Description 2','additionalInformation':'Additional Information 2','listingStatus':'Listing Status 2','experienceLevel':'Experience Level 2','modelResume':'Model Resume 2','modelCoverLetter':'Model Cover Letter 2'}]"));
+        .andExpect(content().json("[{'id':1,'department':'Engineering','listingTitle':'Frontend Developer','jobTitle':'React Developer','jobDescription':'Design and develop responsive user interfaces using React, JavaScript, and CSS.','additionalInformation':'Work with the UX/UI team to create seamless user experiences.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Frontend Developer','modelCoverLetter':'Sample Cover Letter for Frontend Developer'}," + "{'id':2,'department':'Engineering','listingTitle':'Backend Developer','jobTitle':'Java Developer','jobDescription':'Develop scalable backend services using Java, Spring Boot, and MySQL.','additionalInformation':'Collaborate with the front-end team to integrate APIs and optimize system performance.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Backend Developer','modelCoverLetter':'Sample Cover Letter for Backend Developer'}]")
+        );
   }
 
   // @Test
