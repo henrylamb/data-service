@@ -33,6 +33,7 @@ public class JobService{
     }
 
     public URI saveJob(Job job) {
+        // TODO: validate job object
         job = repo.save(job);
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()

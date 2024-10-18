@@ -12,6 +12,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,21 +55,22 @@ public class JobControllerTest {
     @Test
     void testGetJobs() throws Exception {
         // Arrange
-        Page<Job> jobPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 20), 0);
+        List<Job> jobs = List.of(new Job(), new Job());  // Mock 2 Job objects as example
+        jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
         // Assign
         when(jobService.getJobs(0, 20)).thenReturn(jobPage);
 
         // Act & Assert
-        mockMvc.perform(MockMvcRequestBuilders.get("/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/job/")
                         .param("page", "0")
                         .param("items", "20")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isArray())  // Assuming response contains 'content'
-                .andExpect(jsonPath("$.content.length()").value(0))  // Expecting an empty list
-                .andExpect(jsonPath("$.totalPages").value(1))  // Expecting 1 page
-                .andExpect(jsonPath("$.totalElements").value(0));  // Expecting 0 elements
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(2))  // Expecting 2 jobs in the content
+                .andExpect(jsonPath("$.totalPages").value(1))  // Now expecting 1 total page
+                .andExpect(jsonPath("$.totalElements").value(2));
 
         // Verifying the service method was called exactly once
         verify(jobService, times(1)).getJobs(0, 20);
