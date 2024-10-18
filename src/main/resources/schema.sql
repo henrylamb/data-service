@@ -1,3 +1,4 @@
+-- TODO- should the tables have a drop method to drop the tables if they already exist?
 
 -- Create JOB table
 CREATE TABLE job (
