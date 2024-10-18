@@ -1,39 +1,48 @@
 package com.adp.domain;
 
 import jakarta.persistence.*;
-
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name="JOB")
+@Table
 public class Job {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name="user_id")
     private Long userId;
+
     private String department;
+
     @Column(name="user_id")
     private String listingTitle;
+
     @Column(name="date_listed",nullable = false, updatable = false)
     private Instant dateListed;
+
     @Column(name="date_closed",nullable = false, updatable = false)
     private Instant dateClosed;
+
     @Column(name="job_title")
     private String jobTitle;
+
     @Column(name="job_description")
     private String jobDescription;
+
     @Column(name="additional_information")
     private String additionalInformation;
+
     @Column(name="listing_status")
     private String listingStatus;
+
     @Column(name="experience_level")
     private String experienceLevel;
+
     @Column(name="model_resume")
     private String modelResume;
+
     @Column(name="model_cover_letter")
     private String modelCoverLetter;
 
