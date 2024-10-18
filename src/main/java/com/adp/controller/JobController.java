@@ -31,7 +31,7 @@ public class JobController {
 
     @GetMapping("/{cust-id}")
     public Optional<Job> getJob(@PathVariable("cust-id") long id) {
-        return jobService.getCustomer(id);
+        return jobService.getJob(id);
     }
 
     @PostMapping
@@ -57,7 +57,7 @@ public class JobController {
         return ResponseEntity.ok(customer);
     }
 
-    @DeleteMapping("/{cust-id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("cust-id") long id) {
         Optional<Customer> customer = customerService.getCustomer(id);
         if (customer.isEmpty()) {
@@ -67,7 +67,7 @@ public class JobController {
         return ResponseEntity.notFound().build();
     }
 
-    private boolean isCustomerValid(Customer customer) {
-        return customer.getName() != null && customer.getEmail() != null && customer.getPassword() != null;
+    private boolean isJobValid(Job job) {
+        return job.getId() != null && job.getJobTitle() != null && job.getJobDescription() != null;
     }
 }
