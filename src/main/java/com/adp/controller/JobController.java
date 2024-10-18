@@ -70,7 +70,7 @@ public class JobController {
     }
 
     private boolean isJobValid(Job job) {
-        return job.getListingTitle() != null && job.getDateListed() != null && job.getPassword() != null;
+        return job.getListingTitle() != null && job.getDateListed() != null && job.getListingStatus() != null;
       }
     
 }
