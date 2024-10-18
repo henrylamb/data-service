@@ -60,6 +60,7 @@ public class JobController {
       return ResponseEntity.ok(job);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable long id) {
         Optional<Job> job = jobService.getJob(id);
