@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adp.domain.Customer;
 import com.adp.domain.Job;
 import com.adp.service.JobService;
 
@@ -32,12 +31,12 @@ public class JobController {
 
     @GetMapping("/{cust-id}")
     public Optional<Job> getJob(@PathVariable("cust-id") long id) {
-        return jobService.getCustomer(id);
+        return jobService.getJob(id);
     }
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
-        if (!isCustomerValid(newJob)) {
+        if (!isJobValid(newJob)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -59,18 +58,18 @@ public class JobController {
   }
 
 
-    @DeleteMapping("/{cust-id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable("cust-id") long id) {
-        Optional<Customer> customer = customerService.getCustomer(id);
-        if (customer.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        customerService.delete(customer.get());
-        return ResponseEntity.notFound().build();
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deletejob(@PathVariable("cust-id") long id) {
+      Optional<Job> job = jobService.getJob(id);
+      if (job.isEmpty()) {
+          return ResponseEntity.badRequest().build();
+      }
+      jobService.delete(job.get());
+      return ResponseEntity.notFound().build();
+  }
 
     private boolean isJobValid(Job job) {
-        return job.getListingTitle() != null && job.getDateListed() != null && job.getListingStatus() != null;
-      }
+        return job.getId() != null && job.getJobTitle() != null && job.getJobDescription() != null;
+    }
     
 }
