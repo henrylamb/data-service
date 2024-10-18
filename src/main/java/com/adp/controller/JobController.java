@@ -14,39 +14,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adp.domain.Customer;
-import com.adp.service.CustomerService;
+import com.adp.domain.Job;
+import com.adp.service.JobService;
 
 @RestController
 @RequestMapping("/")
 public class JobController {
 
     @Autowired
-    CustomerService customerService;
+    JobService jobService;
 
     @GetMapping
-    public Iterable<Customer> getAll() {
-        return customerService.getAll();
+    public Iterable<Job> getAll() {
+        return jobService.getAll();
     }
 
     @GetMapping("/{cust-id}")
-    public Optional<Customer> getCustomer(@PathVariable("cust-id") long id) {
-        return customerService.getCustomer(id);
+    public Optional<Job> getJob(@PathVariable("cust-id") long id) {
+        return jobService.getCustomer(id);
     }
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
-        if (!isCustomerValid(newCustomer)) {
+        if (!isCustomerValid(newJob)) {
             return ResponseEntity.badRequest().build();
         }
 
-        URI location = customerService.saveCustomer(newCustomer);
+        URI location = jobService.saveJob(newJob);
 
-        return ResponseEntity.created(location).body(newCustomer);
+        return ResponseEntity.created(location).body(newJob);
     }
 
     @PutMapping("/{cust-id}")
-    public ResponseEntity<?> putCustomer(@PathVariable("cust-id") long id, @RequestBody Customer customer) {
+    public ResponseEntity<?> putJob(@PathVariable("cust-id") long id, @RequestBody Customer customer) {
 
         //return error when trying to update a customer that doesnt exist
         Optional<Customer> optionalCustomer = customerService.getCustomer(id);
