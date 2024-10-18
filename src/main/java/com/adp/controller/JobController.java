@@ -30,13 +30,13 @@ public class JobController {
     }
 
     @GetMapping("/{cust-id}")
-    public Optional<Job> getJob(@PathVariable("cust-id") long id) {
-        return jobService.getCustomer(id);
+    public Optional<Job> getJob(@PathVariable long id) {
+        return jobService.getJob(id);
     }
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
-        if (!isCustomerValid(newJob)) {
+        if (!isJobValid(newJob)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -45,29 +45,29 @@ public class JobController {
         return ResponseEntity.created(location).body(newJob);
     }
 
-    @PutMapping("/{cust-id}")
-    public ResponseEntity<?> putJob(@PathVariable("cust-id") long id, @RequestBody Customer customer) {
-
-        //return error when trying to update a customer that doesnt exist
-        Optional<Customer> optionalCustomer = customerService.getCustomer(id);
-        if (optionalCustomer.isEmpty() || customer.getId() != id || !isCustomerValid(customer)) {
-            return ResponseEntity.badRequest().body("Bad Request");
-        }
-        customerService.saveCustomer(customer);
-        return ResponseEntity.ok(customer);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateJob(@PathVariable("id") long id, @RequestBody Job job) {
+      
+      //return error when trying to update a job that doesnt exist
+      Optional<Job> optionalJob = jobService.getJob(id);
+      if (optionalJob.isEmpty() || job.getId() != id || !isJobValid(job)) {
+        return ResponseEntity.badRequest().body("Bad Request");
+      }
+      jobService.saveJob(job);
+      return ResponseEntity.ok(job);
     }
 
-    @DeleteMapping("/{cust-id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable("cust-id") long id) {
-        Optional<Customer> customer = customerService.getCustomer(id);
-        if (customer.isEmpty()) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable long id) {
+        Optional<Job> job = jobService.getJob(id);
+        if (job.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        customerService.delete(customer.get());
+        jobService.delete(job.get());
         return ResponseEntity.notFound().build();
     }
 
-    private boolean isCustomerValid(Customer customer) {
-        return customer.getName() != null && customer.getEmail() != null && customer.getPassword() != null;
-    }
+    private boolean isJobValid(Job job) {
+        return job.getId() != null && job.getJobTitle() != null && job.getJobDescription() != null;
+}
 }
