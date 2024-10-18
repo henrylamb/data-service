@@ -1,9 +1,9 @@
 package com.adp.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import com.adp.domain.Job;
 import org.springframework.stereotype.Repository;
 
-import com.adp.domain.Job;
-
-public interface JobRepository extends CrudRepository<Customer, Long>{
+@Repository
+public interface JobRepository extends CrudRepository<Job, Long>{
 }
