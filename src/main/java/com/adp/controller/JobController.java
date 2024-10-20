@@ -1,8 +1,10 @@
 package com.adp.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
+import com.adp.domain.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,17 @@ public class JobController {
     @Autowired
     JobService jobService;
 
+    //url: ../api//job/page?=page&items?=items
     @GetMapping(value="/", params={"page","items"})
-    public Page<Job> getJobs (@RequestParam int page, @RequestParam (defaultValue = "20") int items){
+    public Page<Job> getJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
         return jobService.getJobs(page, items);
+    }
+
+    //url: ../api/job/{id}/applications
+    @GetMapping("/{id}/applications")
+    public List<Application> getApplications(@PathVariable long id){
+        //TODO check if it is better to have job that has the link to the applications
+        return null;
     }
 
     @GetMapping
