@@ -70,7 +70,7 @@ public class JobController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable long id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);
         if (job.isEmpty()) {
             return ResponseEntity.badRequest().build();

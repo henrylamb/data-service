@@ -219,28 +219,24 @@ public void testUpdateJobInvalid() throws Exception {
 }
 
 @Test
-    // @Disabled
-    public void testDeleteExistingJob() throws Exception {
-      // Arrange
-      Job existingJob = new Job();
-      existingJob.setId(1L);
-      existingJob.setDepartment("Engineering");
-      existingJob.setListingTitle("Frontend Developer");
-      existingJob.setJobTitle("React Developer");
-      existingJob.setJobDescription("Design and develop responsive user interfaces using React, JavaScript, and CSS.");
-      existingJob.setAdditionalInformation("Work with the UX/UI team to create seamless user experiences.");
-      existingJob.setListingStatus("Open");
-      existingJob.setExperienceLevel("Mid-level");
-      existingJob.setModelResume("Sample Resume for Frontend Developer");
-      existingJob.setModelCoverLetter("Sample Cover Letter for Frontend Developer");
-      
-      // Assign
-      when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
+public void testDeleteExistingJob() throws Exception {
+  // Arrange
+  Long jobId=1L;
+  Job existingJob = createMockJob(jobId, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-      // Act & Assert
-      mockMvc.perform(delete("/job/1"))
-          .andExpect(status().isNotFound());
-    }
+  // Mocking that the job exists when jobService.getJob is called
+  when(jobService.getJob(jobId)).thenReturn(Optional.of(existingJob));
+  
+  // Mocking the job deletion success
+  doNothing().when(jobService).delete(existingJob);
+
+  // Act & Assert
+  mockMvc.perform(delete("/job/1", jobId))
+      .andExpect(status().isNotFound());
+
+      verify(jobService, times(1)).delete(existingJob);
+
+}
 
     // @Test
     // @Disabled
