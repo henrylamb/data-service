@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import com.adp.App;
 import com.adp.domain.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,7 @@ public class JobController {
 
     //url: ../api/job/{id}/applications
     @GetMapping("/{id}/applications")
-    public ResponseEntity<?> getApplications(@PathVariable("id") Long id){
+    public ResponseEntity<?> getApplications(@PathVariable(value="id") Long id){
         List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
         if (applications.isEmpty()) {
             return ResponseEntity.status(404).body("No applications found for the given job ID");
