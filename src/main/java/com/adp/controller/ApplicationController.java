@@ -20,7 +20,7 @@ public class ApplicationController {
     ApplicationService applicationService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getApplicationById(@RequestParam("id") long id) {
+    public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {
         Optional<Application> optApplication = applicationService.getApplication(id);
         if(optApplication.isEmpty()){
             return ResponseEntity.badRequest().build();

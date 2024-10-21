@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 
 @Service
 public class ApplicationService {
+
     @Autowired
     private ApplicationRepository repo;
 

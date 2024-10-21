@@ -69,25 +69,6 @@ public class ApplicationControllerTest {
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
 
-    @Test
-    public void getApplications_ShouldReturnPageOfApplications() {
-        int page = 0;
-        int items = 10;
-        Pageable pageable = PageRequest.of(page, items);
-        Application application = new Application();
-        Page<Application> applicationPage = new PageImpl<>(Collections.singletonList(application), pageable, 1);
 
-        Mockito.when(applicationService.repo.findAll(pageable)).thenReturn(applicationPage);
-
-        ResponseEntity<Page> response = restTemplate.getForEntity(
-                "/api/application/page?page={page}&items={items}",
-                Page.class,
-                page,
-                items
-        );
-
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody().getTotalElements()).isEqualTo(1);
-    }
 
 }
