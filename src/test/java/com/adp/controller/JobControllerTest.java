@@ -172,26 +172,26 @@ public class JobControllerTest {
     // TODO figure out how to deal with the date issue
 
 
-    @Test
-    @Disabled("Test disabled for pagination.")
-    void testPaginationGetJobs() throws Exception {
-        List<Job> jobs = List.of(job1, job2); // Mock 2 Job objects as example
-        Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
+    // @Test // DOES THIS EVEN WORK OR NEED TO BE HERE?
+    // // @Disabled("Test disabled for pagination.")
+    // void testPaginationGetJobs() throws Exception {
+    //     List<Job> jobs = List.of(job1, job2); // Mock 2 Job objects as example
+    //     Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
-        when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
+    //     when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
 
-        mockMvc.perform(get("/job")
-                .param("page", "0")
-                .param("items", "20")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2)) // Expecting 2 jobs in the content
-                .andExpect(jsonPath("$.totalPages").value(1)) // Now expecting 1 total page
-                .andExpect(jsonPath("$.totalElements").value(2));
+    //     mockMvc.perform(get("/job")
+    //             .param("page", "0")
+    //             .param("items", "20")
+    //             .contentType(MediaType.APPLICATION_JSON))
+    //             .andExpect(status().isOk())
+    //             .andExpect(jsonPath("$.content").isArray())
+    //             .andExpect(jsonPath("$.content.length()").value(2)) // Expecting 2 jobs in the content
+    //             .andExpect(jsonPath("$.totalPages").value(1)) // Now expecting 1 total page
+    //             .andExpect(jsonPath("$.totalElements").value(2));
 
-        verify(jobService, times(1)).getPaginatedJobs(0, 20);
-    }
+    //     verify(jobService, times(1)).getPaginatedJobs(0, 20);
+    // }
 
     @Test
     public void testGetAllJobs() throws Exception {
