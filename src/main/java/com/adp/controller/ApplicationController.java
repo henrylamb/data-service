@@ -2,6 +2,9 @@ package com.adp.controller;
 
 import com.adp.domain.Application;
 import com.adp.service.ApplicationService;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,11 +13,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/application")
+@RequestMapping("/application")
 public class ApplicationController {
 
     @Autowired
     ApplicationService applicationService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getApplicationById(@RequestParam("id") long id) {
+        Optional<Application> optApplication = applicationService.getApplication(id);
+        if(optApplication.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(optApplication.get());
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication(@PathVariable("id") long id) {
@@ -42,9 +54,8 @@ public class ApplicationController {
 
     @GetMapping("/page")
     public ResponseEntity<Page<Application>> getApplications(@RequestParam("page") int page, @RequestParam("items") int items) {
-        Pageable applicationPage = PageRequest.of(page, items);
 
-        Page<Application> applications = applicationService.repo.findAll(applicationPage);
+        Page<Application> applications = applicationService.findAll(page, items);
         return ResponseEntity.ok(applications);
     }
     
