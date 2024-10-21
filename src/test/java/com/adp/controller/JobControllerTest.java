@@ -218,6 +218,7 @@ public void testUpdateJobInvalid() throws Exception {
       .andExpect(content().string("Bad Request"));
 }
 
+//when you try to delete the objects that does exist you will have a response 204 not 404
 @Test
 public void testDeleteExistingJob() throws Exception {
   // Arrange
@@ -232,7 +233,7 @@ public void testDeleteExistingJob() throws Exception {
 
   // Act & Assert
   mockMvc.perform(delete("/job/1", jobId))
-      .andExpect(status().isNotFound());
+      .andExpect(status().isNoContent());
 
       verify(jobService, times(1)).delete(existingJob);
 

@@ -76,7 +76,7 @@ public class JobController {
             return ResponseEntity.badRequest().build();
         }
         jobService.delete(job.get());
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 
     private boolean isJobValid(Job job) {
