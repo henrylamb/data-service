@@ -68,6 +68,34 @@ public class JobControllerTest {
                 "UPDATED", "UPDATED");
     }
 
+        
+    private Job createJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription, String additionalInformation, String listingStatus, String experienceLevel, String modelResume, String modelCoverLetter) {
+        Job job = new Job();
+        job.setId(id);
+        job.setDepartment(department);
+        job.setListingTitle(listingTitle);
+        job.setJobTitle(jobTitle);
+        job.setJobDescription(jobDescription);
+        job.setAdditionalInformation(additionalInformation);
+        job.setListingStatus(listingStatus);
+        job.setExperienceLevel(experienceLevel);
+        job.setModelResume(modelResume);
+        job.setModelCoverLetter(modelCoverLetter);
+        return job;
+    }
+
+    private Application createApplication(Long id, Long candidateId, String candidateEmail, Job job, String coverLetter, String customResume) {
+        Application application = new Application();
+        application.setId(id);
+        application.setCandidateId(candidateId);
+        application.setCandidateEmail(candidateEmail);
+        application.setJob(job);
+        application.setCoverLetter(coverLetter);
+        application.setCustomResume(customResume);
+        return application;
+    }
+
+
     @Test
     @Disabled
     void testGetPaginatedJobs() throws Exception {
@@ -142,31 +170,6 @@ public class JobControllerTest {
         verify(jobService, times(1)).getApplicationsOfGivenJobId(jobId);
     }
     // TODO figure out how to deal with the date issue
-    private Job createJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription, String additionalInformation, String listingStatus, String experienceLevel, String modelResume, String modelCoverLetter) {
-        Job job = new Job();
-        job.setId(id);
-        job.setDepartment(department);
-        job.setListingTitle(listingTitle);
-        job.setJobTitle(jobTitle);
-        job.setJobDescription(jobDescription);
-        job.setAdditionalInformation(additionalInformation);
-        job.setListingStatus(listingStatus);
-        job.setExperienceLevel(experienceLevel);
-        job.setModelResume(modelResume);
-        job.setModelCoverLetter(modelCoverLetter);
-        return job;
-    }
-
-    private Application createApplication(Long id, Long candidateId, String candidateEmail, Job job, String coverLetter, String customResume) {
-        Application application = new Application();
-        application.setId(id);
-        application.setCandidateId(candidateId);
-        application.setCandidateEmail(candidateEmail);
-        application.setJob(job);
-        application.setCoverLetter(coverLetter);
-        application.setCustomResume(customResume);
-        return application;
-    }
 
 
     @Test
