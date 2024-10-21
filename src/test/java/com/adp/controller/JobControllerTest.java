@@ -123,80 +123,63 @@ public class JobControllerTest {
   //       .andExpect(status().isBadRequest());
   // }
 
-  // @Test
-  // @Disabled
-  // public void testPutCustomer() throws Exception {
-  //   // Arrange
-  //   Customer existingCustomer = new Customer();
-  //   existingCustomer.setId(1L);
-  //   existingCustomer.setName("John Doe");
-  //   existingCustomer.setEmail("john.doe@example.com");
-  //   existingCustomer.setPassword("password");
+  @Test
+  public void testUpdateJob() throws Exception {
+    // Arrange
+    Job existingJob = createMockJob(1L, "Department 1", "Listing Title 1", "Job Title 1", "Job Description 1", "Additional Information 1", "Listing Status 1", "Experience Level 1", "Model Resume 1", "Model Cover Letter 1");
 
-  //   Customer updatedCustomer = new Customer();
-  //   updatedCustomer.setId(1L);
-  //   updatedCustomer.setName("John Doe Updated");
-  //   updatedCustomer.setEmail("john.doe.updated@example.com");
-  //   updatedCustomer.setPassword("newpassword");
+    Job updateJob = createMockJob(1L, "Department Updated", "Listing Title Updated", "Job Title Updated", "Job Description Updated", "Additional Information Updated", "Listing Status Updated", "Experience Level Updated", "Model Resume Updated", "Model Cover Letter Updated");
 
-  //   // Assign
-  //   when(customerService.getCustomer(1L)).thenReturn(Optional.of(existingCustomer));
-  //   when(customerService.saveCustomer(any(Customer.class))).thenReturn(null);
+    // Assign
+    when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
+    when(jobService.saveJob(any(Job.class))).thenReturn(null);
 
-  //   // Act & Assert
-  //   mockMvc.perform(put("/customers/1")
-  //       .contentType(MediaType.APPLICATION_JSON)
-  //       .content(new ObjectMapper().writeValueAsString(updatedCustomer)))
-  //       .andExpect(status().isOk())
-  //       .andExpect(content().json(
-  //           "{'id':1,'name':'John Doe Updated','email':'john.doe.updated@example.com','password':'newpassword'}"));
-  // }
+    // Act & Assert
+    mockMvc.perform(put("/job/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(new ObjectMapper().writeValueAsString(updateJob)))
+        .andExpect(status().isOk())
+        .andExpect(content().json(
+             "{'id':1,'department':'Department Updated','listingTitle':'Listing Title Updated','jobTitle':'Job Title Updated','jobDescription':'Job Description Updated','additionalInformation':'Additional Information Updated','listingStatus':'Listing Status Updated','experienceLevel':'Experience Level Updated','modelResume':'Model Resume Updated','modelCoverLetter':'Model Cover Letter Updated'}"));
+}
 
-  // @Test
-  // @Disabled
-  // public void testPutCustomerNotFound() throws Exception {
-  //   // Arrange
-  //   Customer updatedCustomer = new Customer();
-  //   updatedCustomer.setId(1L);
-  //   updatedCustomer.setName("John Doe Updated");
-  //   updatedCustomer.setEmail("john.doe.updated@example.com");
-  //   updatedCustomer.setPassword("newpassword");
+@Test
+public void testUpdateJobNotFound() throws Exception {
+  // Arrange
+  Job updatedJob = createMockJob(1L, "Department Updated", "Listing Title Updated", "Job Title Updated", "Job Description Updated", "Additional Information Updated", "Listing Status Updated", "Experience Level Updated", "Model Resume Updated", "Model Cover Letter Updated");
 
-  //   // Assign
-  //   when(customerService.getCustomer(1L)).thenReturn(Optional.empty());
+  // Assign
+  when(jobService.getJob(1L)).thenReturn(Optional.empty());
 
-  //   // Act & Assert
-  //   mockMvc.perform(put("/customers/1")
-  //       .contentType(MediaType.APPLICATION_JSON)
-  //       .content(new ObjectMapper().writeValueAsString(updatedCustomer)))
-  //       .andExpect(status().isBadRequest())
-  //       .andExpect(content().string("Bad Request"));
-  // }
+  // Act & Assert
+  mockMvc.perform(put("/job/1")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(new ObjectMapper().writeValueAsString(updatedJob)))
+      .andExpect(status().isBadRequest())
+      .andExpect(content().string("Bad Request"));
+}
 
-  // @Test
-  // @Disabled
-  // public void testPutCustomerInvalid() throws Exception {
-  //   // Arrange
-  //   Customer existingCustomer = new Customer();
-  //   existingCustomer.setId(1L);
-  //   existingCustomer.setName("John Doe");
-  //   existingCustomer.setEmail("john.doe@example.com");
-  //   existingCustomer.setPassword("password");
+@Test
+public void testUpdateJobInvalid() throws Exception {
+  // Arrange
+  Job existingJob = createMockJob(1L, "Department 1", "Listing Title 1", "Job Title 1", "Job Description 1", "Additional Information 1", "Listing Status 1", "Experience Level 1", "Model Resume 1", "Model Cover Letter 1");
 
-  //   Customer invalidCustomer = new Customer();
-  //   invalidCustomer.setId(1L);
-  //   invalidCustomer.setName(""); // Invalid name
+  // Invalid job with an empty jobTitle
+  Job invalidJob = new Job();
+  invalidJob.setId(1L);
+  invalidJob.setDepartment("Department 1");
+  invalidJob.setListingTitle("null");
 
-  //   // Assign
-  //   when(customerService.getCustomer(1L)).thenReturn(Optional.of(existingCustomer));
+  // Assign
+  when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
 
-  //   // Act & Assert
-  //   mockMvc.perform(put("/customers/1")
-  //       .contentType(MediaType.APPLICATION_JSON)
-  //       .content(new ObjectMapper().writeValueAsString(invalidCustomer)))
-  //       .andExpect(status().isBadRequest())
-  //       .andExpect(content().string("Bad Request"));
-  // }
+  // Act & Assert
+  mockMvc.perform(put("/job/1")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(new ObjectMapper().writeValueAsString(invalidJob)))
+      .andExpect(status().isBadRequest())
+      .andExpect(content().string("Bad Request"));
+}
 
   // @Test
   // @Disabled
