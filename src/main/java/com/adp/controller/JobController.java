@@ -67,7 +67,7 @@ public class JobController {
       //return error when trying to update a job that doesnt exist
       Optional<Job> optionalJob = jobService.getJob(id);
       if (optionalJob.isEmpty() || job.getId() != id || !isJobValid(job)) {
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
       }
       jobService.saveJob(job);
       return ResponseEntity.ok(job);
