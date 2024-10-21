@@ -1,10 +1,13 @@
 package com.adp.controller;
 
 import com.adp.domain.Application;
+import com.adp.domain.Job;
+import com.adp.request.ApplicationRequest;
 import com.adp.service.ApplicationService;
 
 import java.util.Optional;
 
+import com.adp.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,9 @@ public class ApplicationController {
     @Autowired
     ApplicationService applicationService;
 
+    @Autowired
+    JobService jobService;
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {
         Optional<Application> optApplication = applicationService.getApplication(id);
@@ -31,23 +37,62 @@ public class ApplicationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication(@PathVariable("id") long id) {
         // delete application
-        applicationService.getApplication(id);
+        applicationService.deleteApplication(id);
 
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Application> putApplication(@PathVariable("id") long id, @RequestBody Application application) {
-        // update application from a users perpective
-        applicationService.saveApplication(application);
+    public ResponseEntity<Application> putApplication(@PathVariable("id") long id, @RequestBody ApplicationRequest applicationReq) {
+        System.out.println(applicationReq);
+        Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
+
+        Application application = applicationReq.convertToApplication();
+        application.setId(id);
+        if (jobOptional.isPresent()) {
+            Job job = jobOptional.get();
+            application.setJob(job);
+        } else {
+            // Handle the case where the job is not found
+            // For example, you might want to throw an exception or return an error response
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!isApplicationValid(application)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        applicationService.updateApplication(application);
 
         return ResponseEntity.ok(application);
     }
 
     @PutMapping("/manager/{id}")
-    public ResponseEntity<Application> putApplicationManager(@PathVariable("id") long id, @RequestBody Application application) {
-        // update application by a hiring manager
-        applicationService.saveApplication(application);
+    public ResponseEntity<Application> putApplicationManager(@PathVariable("id") long id, @RequestBody ApplicationRequest applicationReq) {
+        Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
+
+        Optional<Application> optApplication = applicationService.getApplication(id);
+        if(optApplication.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        Application application = optApplication.get();
+
+        application.setApplicationStatus(applicationReq.getApplicationStatus());
+
+        if (jobOptional.isPresent()) {
+            Job job = jobOptional.get();
+            application.setJob(job);
+        } else {
+            // Handle the case where the job is not found
+            // For example, you might want to throw an exception or return an error response
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!isApplicationValid(application)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        applicationService.updateApplication(application);
 
         return ResponseEntity.ok(application);
     }
@@ -60,10 +105,24 @@ public class ApplicationController {
     }
     
     @PostMapping
-    public ResponseEntity<Application> addApplication(@RequestBody Application application) {
-     if (!isApplicationValid(application)) {
-        return ResponseEntity.badRequest().build();
-     }
+    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
+        System.out.println(applicationReq);
+      Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
+
+        Application application = applicationReq.convertToApplication();
+
+        if (jobOptional.isPresent()) {
+            Job job = jobOptional.get();
+            application.setJob(job);
+        } else {
+            // Handle the case where the job is not found
+            // For example, you might want to throw an exception or return an error response
+            return ResponseEntity.badRequest().build();
+        }
+
+         if (!isApplicationValid(application)) {
+            return ResponseEntity.badRequest().build();
+         }
 
         applicationService.saveApplication(application);
         return ResponseEntity.status(201).body(application);
@@ -73,6 +132,10 @@ public class ApplicationController {
 private boolean isApplicationValid(Application application) {
     // return application.getJobId() != null && application.getCandidateEmail() != null 
     // && application.getCandidateId() != null;
+    if (application.getCandidateEmail() != null && application.getCandidateId() != null) {
+        return true;
+    }
+
     return false;
 }
 

@@ -21,9 +21,9 @@ public class JobController {
     JobService jobService;
 
     //url: ../api/job?page=page&items=items
-    @GetMapping(value="/", params={"page","items"})
-    public Page<Job> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
-        return jobService.getPaginatedJobs(page, items);
+    @GetMapping(value="/page")
+    public ResponseEntity<Page<Job>> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
+        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
     }
 
     //url: ../api/job/{id}/applications

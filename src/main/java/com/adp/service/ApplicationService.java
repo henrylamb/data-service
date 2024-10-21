@@ -32,4 +32,13 @@ public class ApplicationService {
     public void saveApplication(Application application) {
         repo.save(application);
     }
+
+    public void deleteApplication(long id){
+        repo.deleteById(id);
+    }
+
+    public void updateApplication(Application application){
+        repo.save(application);
+    }
+
 }
