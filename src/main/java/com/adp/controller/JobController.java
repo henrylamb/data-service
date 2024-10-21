@@ -37,6 +37,12 @@ public class JobController {
         }
     }
 
+    //TODO url: ../api/job/{id}?filter=filter
+    // @GetMapping(value="/{id}", params={"filter"})
+    // public Page<Job> getFilteredApplications(@RequestParam Optional<String> filter){
+    //     //List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
+    // }
+
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
@@ -48,7 +54,6 @@ public class JobController {
     }
 
     // TODO /job/{id}/filter={filter}
-    // TODO GET /job/page?={page}&items?={items}
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
