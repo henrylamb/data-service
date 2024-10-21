@@ -20,17 +20,21 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-    //url: ../api//job/page?=page&items?=items
+    //url: ../api/job?page=page&items=items
     @GetMapping(value="/", params={"page","items"})
-    public Page<Job> getJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
-        return jobService.getJobs(page, items);
+    public Page<Job> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
+        return jobService.getPaginatedJobs(page, items);
     }
 
     //url: ../api/job/{id}/applications
     @GetMapping("/{id}/applications")
-    public List<Application> getApplications(@PathVariable long id){
-        //TODO check if it is better to have job that has the link to the applications
-        return null;
+    public ResponseEntity<?> getApplications(@PathVariable(value="id") Long id){
+        List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
+        if (applications.isEmpty()) {
+            return ResponseEntity.status(404).body("No applications found for the given job ID");
+        } else {
+            return ResponseEntity.ok(applications);
+        }
     }
 
     @GetMapping
