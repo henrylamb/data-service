@@ -28,6 +28,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import com.adp.domain.Application;
 import com.adp.domain.Job;
+import com.adp.domain.JobTransferRequest;
 import com.adp.service.JobService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
@@ -171,28 +172,6 @@ public class JobControllerTest {
     }
     // TODO figure out how to deal with the date issue
 
-
-    // @Test // DOES THIS EVEN WORK OR NEED TO BE HERE?
-    // // @Disabled("Test disabled for pagination.")
-    // void testPaginationGetJobs() throws Exception {
-    //     List<Job> jobs = List.of(job1, job2); // Mock 2 Job objects as example
-    //     Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
-
-    //     when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
-
-    //     mockMvc.perform(get("/job")
-    //             .param("page", "0")
-    //             .param("items", "20")
-    //             .contentType(MediaType.APPLICATION_JSON))
-    //             .andExpect(status().isOk())
-    //             .andExpect(jsonPath("$.content").isArray())
-    //             .andExpect(jsonPath("$.content.length()").value(2)) // Expecting 2 jobs in the content
-    //             .andExpect(jsonPath("$.totalPages").value(1)) // Now expecting 1 total page
-    //             .andExpect(jsonPath("$.totalElements").value(2));
-
-    //     verify(jobService, times(1)).getPaginatedJobs(0, 20);
-    // }
-
     @Test
     public void testGetAllJobs() throws Exception {
         when(jobService.getAll()).thenReturn(Arrays.asList(job1, job2));
@@ -263,6 +242,35 @@ public class JobControllerTest {
     }
 
     @Test
+public void testTransferJobToHiringManager() throws Exception {
+    // Arrange
+    Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+            "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+            "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+            "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+    Job updatedJob = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+            "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+            "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+            "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+    updatedJob.setUserId(2L); // Assuming userID is the field to be updated
+
+    JobTransferRequest transferRequest = new JobTransferRequest();
+    transferRequest.setJobId(1L);
+    transferRequest.setNewUserId(2L);
+
+    when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
+    doNothing().when(jobService).transferJobToNewHiringManager(any(JobTransferRequest.class));
+    when(jobService.getJob(1L)).thenReturn(Optional.of(updatedJob));
+
+    // Act & Assert
+    mockMvc.perform(put("/job/transfer")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(transferRequest)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.userId").value(2L));
+}
+
+    @Test
     public void testUpdateJobInvalid() throws Exception {
         when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
 
@@ -296,4 +304,6 @@ public class JobControllerTest {
         mockMvc.perform(delete("/job/1"))
                 .andExpect(status().isNotFound());
     }
+
+
 }
