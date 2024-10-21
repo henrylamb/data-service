@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table
+@Table(name="JOBS")
 public class Job {
 
     @Id
