@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "APPLICATIONS")
+@Table(name = "APPLICATION")
 public class Application {
     @jakarta.persistence.Id
     @Id
