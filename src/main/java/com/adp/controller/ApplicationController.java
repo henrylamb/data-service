@@ -1,9 +1,7 @@
 package com.adp.controller;
 
-import com.adp.App;
 import com.adp.domain.Application;
 import com.adp.service.ApplicationService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +15,6 @@ public class ApplicationController {
 
     @Autowired
     ApplicationService applicationService;
-    @Autowired
-    private App app;
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication(@PathVariable("id") long id) {
@@ -64,8 +60,9 @@ public class ApplicationController {
 
 
 private boolean isApplicationValid(Application application) {
-    return application.getJobId() != null && application.getCandidateEmail() != null 
-    && application.getDateApplied() != null;
+    // return application.getJobId() != null && application.getCandidateEmail() != null 
+    // && application.getCandidateId() != null;
+    return false;
 }
 
 }
