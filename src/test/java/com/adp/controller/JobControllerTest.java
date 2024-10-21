@@ -147,7 +147,7 @@ public class JobControllerTest {
     }
 
     @Test
-  public void testAddJobInvalid() throws Exception {
+    public void testAddJobInvalid() throws Exception {
     // Arrange
     Job invalidJob = new Job();
     invalidJob.setId(1L);
