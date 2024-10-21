@@ -63,7 +63,7 @@ public class JobControllerTest {
         when(jobService.getJobs(0, 20)).thenReturn(jobPage);
 
         // Act & Assert
-        mockMvc.perform(MockMvcRequestBuilders.get("/job/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/job")
                         .param("page", "0")
                         .param("items", "20")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -130,6 +130,7 @@ public class JobControllerTest {
     // }
 
     @Test
+    // @Disabled
     public void testAddJob() throws Exception {
       // Arrange
       URI location = new URI("/job/1");
@@ -140,7 +141,8 @@ public class JobControllerTest {
       // Act & Assert
       mockMvc.perform(post("/job")
           .contentType(MediaType.APPLICATION_JSON)
-          .content(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer")
+          .content(new ObjectMapper().writeValueAsString(createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer")))
+          )
           .andExpect(header().string("Location", "/job/1"));
     }
 
