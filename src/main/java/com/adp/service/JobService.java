@@ -1,9 +1,12 @@
 package com.adp.service;
 
 import java.net.URI;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.adp.repository.JobRepository;
+import com.adp.domain.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +21,16 @@ public class JobService{
     @Autowired
     JobRepository repo;
 
+    public List<Application> getApplicationsOfGivenJobId(Long jobId){
+        Optional<Job> job = repo.findById(jobId);
+        List<Application> returnList =  new ArrayList<>();
+        if (job.isPresent()){
+            returnList = job.get().getApplications();
+        }
+        return returnList;
+    }
 
-    public Page<Job> getJobs(int pageNumber, int size) {
+    public Page<Job> getPaginatedJobs(int pageNumber, int size) {
         Pageable pageable = PageRequest.of(pageNumber, size);
         return repo.findAll(pageable);
     }
