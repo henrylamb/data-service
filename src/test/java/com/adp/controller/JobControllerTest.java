@@ -1,17 +1,21 @@
 package com.adp.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
-import java.time.Instant;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,20 +25,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.adp.domain.Customer;
 import com.adp.domain.Job;
 import com.adp.service.JobService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(controllers = JobController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -96,7 +99,7 @@ public class JobControllerTest {
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testGetAllJobs() throws Exception {
         // Arrange
         // Create two jobs
         Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
@@ -121,22 +124,20 @@ public class JobControllerTest {
                                 + "{'id':2,'department':'Engineering','listingTitle':'Backend Developer','jobTitle':'Java Developer','jobDescription':'Develop scalable backend services using Java, Spring Boot, and MySQL.','additionalInformation':'Collaborate with the front-end team to integrate APIs and optimize system performance.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Backend Developer','modelCoverLetter':'Sample Cover Letter for Backend Developer'}]"));
     }
 
-    // @Test
-    // @Disabled
-    // public void testGetCustomer() throws Exception {
-    // // Arrange
-    // Customer customer = new Customer();
-    // customer.setId(1L);
-    // customer.setName("John Doe");
+    @Test
+    @Disabled
+    public void testGetJob() throws Exception {
+    // Arrange
+    Job job = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer","Design and develop responsive user interfaces using React, JavaScript, and CSS.","Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level","Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-    // // Assign
-    // when(customerService.getCustomer(1L)).thenReturn(Optional.of(customer));
+    // Assign
+    when(jobService.getJob(1L)).thenReturn(Optional.of(job));
 
-    // // Act & Assert
-    // mockMvc.perform(get("/customers/1"))
-    // .andExpect(status().isOk())
-    // .andExpect(content().json("{'id':1,'name':'John Doe'}"));
-    // }
+    // Act & Assert
+    mockMvc.perform(get("/job/1"))
+    .andExpect(status().isOk())
+    .andExpect(content().json("{'id':1,'department':'Engineering','listingTitle':'Frontend Developer','jobTitle':'React Developer','jobDescription':'Design and develop responsive user interfaces using React, JavaScript, and CSS.','additionalInformation':'Work with the UX/UI team to create seamless user experiences.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Frontend Developer','modelCoverLetter':'Sample Cover Letter for Frontend Developer'}"));
+    }
 
     @Test
     // @Disabled
