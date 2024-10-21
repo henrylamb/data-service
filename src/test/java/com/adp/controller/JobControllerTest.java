@@ -53,7 +53,7 @@ public class JobControllerTest {
     }
 
     @Test 
-    // @Disabled
+    @Disabled
     void testPaginationGetJobs() throws Exception {
         // Arrange
         List<Job> jobs = List.of(new Job(), new Job());  // Mock 2 Job objects as example
@@ -129,21 +129,20 @@ public class JobControllerTest {
     //       .andExpect(content().json("{'id':1,'name':'John Doe'}"));
     // }
 
-    // @Test
-    // @Disabled
-    // public void testAddCustomer() throws Exception {
-    //   // Arrange
-    //   URI location = new URI("/customers/1");
+    @Test
+    public void testAddJob() throws Exception {
+      // Arrange
+      URI location = new URI("/job/1");
 
-    //   // Assign
-    //   when(customerService.saveCustomer(any(Customer.class))).thenReturn(location);
+      // Assign
+      when(jobService.saveJob(any(Job.class))).thenReturn(location);
 
-    //   // Act & Assert
-    //   mockMvc.perform(post("/customers")
-    //       .contentType(MediaType.APPLICATION_JSON)
-    //       .content("{\"name\":\"John Doe\", \"password\":\"test\", \"email\":\"test@test.com\"}"))
-    //       .andExpect(header().string("Location", "/customers/1"));
-    // }
+      // Act & Assert
+      mockMvc.perform(post("/job")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer")
+          .andExpect(header().string("Location", "/job/1"));
+    }
 
     @Test
   public void testAddJobInvalid() throws Exception {
