@@ -25,7 +25,7 @@ public class JobService{
     public List<Application> getApplicationsOfGivenJobId(Long jobId){
         Optional<Job> job = repo.findById(jobId);
         List<Application> returnList =  new ArrayList<>();
-        if (job.isPresent()){
+        if(job.isPresent()){
             returnList = job.get().getApplications();
         }
         return returnList;
