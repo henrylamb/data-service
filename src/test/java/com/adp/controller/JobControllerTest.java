@@ -54,17 +54,17 @@ public class JobControllerTest {
     @BeforeEach
     void setup() {
         // Creating common Job instances for tests
-        job1 = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer",
+        job1 = createJob(1L, "Engineering", "Backend Developer", "Java Developer",
                 "Develop scalable backend services using Java, Spring Boot, and MySQL.",
                 "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open",
                 "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
 
-        job2 = createMockJob(2L, "Engineering", "Frontend Developer", "React Developer",
+        job2 = createJob(2L, "Engineering", "Frontend Developer", "React Developer",
                 "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
                 "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
                 "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-        updatedJob = createMockJob(1L, "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED",
+        updatedJob = createJob(1L, "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED",
                 "UPDATED", "UPDATED");
     }
 
@@ -95,21 +95,8 @@ public class JobControllerTest {
     void testGetApplications() throws Exception {
         // Arrange
 
-        Application application1 = new Application();
-        application1.setId(1L);
-        application1.setCandidateId(1L);
-        application1.setCandidateEmail("candidate1@example.com");
-        application1.setJob(job1);
-        application1.setCoverLetter("Cover Letter 1");
-        application1.setCustomResume("Custom Resume 1");
-
-        Application application2 = new Application();
-        application2.setId(2L);
-        application2.setCandidateId(2L);
-        application2.setCandidateEmail("candidate2@example.com");
-        application2.setJob(job1);
-        application2.setCoverLetter("Cover Letter 2");
-        application2.setCustomResume("Custom Resume 2");
+        Application application1 = createApplication(1L, 1L, "candidate1@example.com", job1, "Cover Letter 1", "Custom Resume 1");
+        Application application2 = createApplication(2L, 2L, "candidate2@example.com", job1, "Cover Letter 2", "Custom Resume 2");
 
         job1.setApplications(List.of(application1, application2));
 
@@ -155,7 +142,7 @@ public class JobControllerTest {
         verify(jobService, times(1)).getApplicationsOfGivenJobId(jobId);
     }
     // TODO figure out how to deal with the date issue
-    private Job createMockJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription, String additionalInformation, String listingStatus, String experienceLevel, String modelResume, String modelCoverLetter) {
+    private Job createJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription, String additionalInformation, String listingStatus, String experienceLevel, String modelResume, String modelCoverLetter) {
         Job job = new Job();
         job.setId(id);
         job.setDepartment(department);
@@ -168,6 +155,17 @@ public class JobControllerTest {
         job.setModelResume(modelResume);
         job.setModelCoverLetter(modelCoverLetter);
         return job;
+    }
+
+    private Application createApplication(Long id, Long candidateId, String candidateEmail, Job job, String coverLetter, String customResume) {
+        Application application = new Application();
+        application.setId(id);
+        application.setCandidateId(candidateId);
+        application.setCandidateEmail(candidateEmail);
+        application.setJob(job);
+        application.setCoverLetter(coverLetter);
+        application.setCustomResume(customResume);
+        return application;
     }
 
 
