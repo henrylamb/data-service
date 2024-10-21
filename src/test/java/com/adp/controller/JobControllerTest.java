@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
@@ -64,11 +66,6 @@ public class JobControllerTest {
 
         updatedEngineer = createMockJob(1L, "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED",
                 "UPDATED", "UPDATED");
-    }
-
-    private Job createMockJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription,
-            String additionalInformation, String listingStatus, String experienceLevel, String modelResume,
-            String modelCoverLetter) {
     }
 
     @Test
@@ -179,7 +176,7 @@ public class JobControllerTest {
         List<Job> jobs = List.of(backendEngineer, frontendEngineer); // Mock 2 Job objects as example
         Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
-        when(jobService.getJobs(0, 20)).thenReturn(jobPage);
+        when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
 
         mockMvc.perform(get("/job")
                 .param("page", "0")
@@ -191,7 +188,7 @@ public class JobControllerTest {
                 .andExpect(jsonPath("$.totalPages").value(1)) // Now expecting 1 total page
                 .andExpect(jsonPath("$.totalElements").value(2));
 
-        verify(jobService, times(1)).getJobs(0, 20);
+        verify(jobService, times(1)).getPaginatedJobs(0, 20);
     }
 
     @Test

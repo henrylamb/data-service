@@ -60,8 +60,9 @@ public class ApplicationController {
 
 
 private boolean isApplicationValid(Application application) {
-    return application.getJobId() != null && application.getCandidateEmail() != null 
-    && application.getCandidateId() != null;
+    // return application.getJobId() != null && application.getCandidateEmail() != null 
+    // && application.getCandidateId() != null;
+    return false;
 }
 
 }
