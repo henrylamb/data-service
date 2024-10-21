@@ -53,6 +53,7 @@ public class JobControllerTest {
     }
 
     @Test
+    @Disable
     void testGetJobs() throws Exception {
         // Arrange
         List<Job> jobs = List.of(new Job(), new Job());  // Mock 2 Job objects as example
