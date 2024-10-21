@@ -81,7 +81,7 @@ public class JobControllerTest {
         application1.setId(1L);
         application1.setCandidateId(1L);
         application1.setCandidateEmail("candidate1@example.com");
-        application1.setJobId(1L);
+        application1.setJob(job);
         application1.setCoverLetter("Cover Letter 1");
         application1.setCustomResume("Custom Resume 1");
 
@@ -89,7 +89,7 @@ public class JobControllerTest {
         application2.setId(2L);
         application2.setCandidateId(2L);
         application2.setCandidateEmail("candidate2@example.com");
-        application2.setJobId(1L);
+        application2.setJob(job);
         application2.setCoverLetter("Cover Letter 2");
         application2.setCustomResume("Custom Resume 2");
         job.setApplications(List.of(application1, application2));
