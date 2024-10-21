@@ -1,26 +1,24 @@
 package com.adp.domain;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "APPLICATION")
 public class Application {
-    @jakarta.persistence.Id
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "candidate_id")
-    private Integer candidateId;
+    private Long candidateId;
 
     @Column(name = "candidate_email", length = 255)
     private String candidateEmail;
 
     @Column(name = "job_id")
-    private Integer jobId;
+    private Long jobId;
 
     @Column(name = "date_applied", nullable = true, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateApplied;
@@ -68,11 +66,11 @@ public class Application {
     @Column(name = "review")
     private String review;
 
-    public Integer getCandidateId() {
+    public Long getCandidateId() {
         return candidateId;
     }
 
-    public void setCandidateId(Integer candidateId) {
+    public void setCandidateId(Long candidateId) {
         this.candidateId = candidateId;
     }
 
@@ -84,11 +82,11 @@ public class Application {
         this.candidateEmail = candidateEmail;
     }
 
-    public Integer getJobId() {
+    public Long getJobId() {
         return jobId;
     }
 
-    public void setJobId(Integer jobId) {
+    public void setJobId(Long jobId) {
         this.jobId = jobId;
     }
 
