@@ -47,24 +47,24 @@ public class JobControllerTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private Job backendEngineer;
-    private Job frontendEngineer;
-    private Job updatedEngineer;
+    private Job job1;
+    private Job job2;
+    private Job updatedJob;
 
     @BeforeEach
     void setup() {
         // Creating common Job instances for tests
-        backendEngineer = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer",
+        job1 = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer",
                 "Develop scalable backend services using Java, Spring Boot, and MySQL.",
                 "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open",
                 "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
 
-        frontendEngineer = createMockJob(2L, "Engineering", "Frontend Developer", "React Developer",
+        job2 = createMockJob(2L, "Engineering", "Frontend Developer", "React Developer",
                 "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
                 "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
                 "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-        updatedEngineer = createMockJob(1L, "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED",
+        updatedJob = createMockJob(1L, "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED",
                 "UPDATED", "UPDATED");
     }
 
@@ -72,8 +72,6 @@ public class JobControllerTest {
     @Disabled
     void testGetPaginatedJobs() throws Exception {
         // Arrange
-        Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
-        Job job2 = createMockJob(2L, "Engineering", "Backend Developer", "Java Developer", "Develop scalable backend services using Java, Spring Boot, and MySQL.", "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open", "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
         List<Job> jobs = List.of(job1, job2);  // Mock 2 Job objects as example
         Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
@@ -96,12 +94,12 @@ public class JobControllerTest {
     @Disabled
     void testGetApplications() throws Exception {
         // Arrange
-        Job job = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+
         Application application1 = new Application();
         application1.setId(1L);
         application1.setCandidateId(1L);
         application1.setCandidateEmail("candidate1@example.com");
-        application1.setJob(job);
+        application1.setJob(job1);
         application1.setCoverLetter("Cover Letter 1");
         application1.setCustomResume("Custom Resume 1");
 
@@ -109,10 +107,11 @@ public class JobControllerTest {
         application2.setId(2L);
         application2.setCandidateId(2L);
         application2.setCandidateEmail("candidate2@example.com");
-        application2.setJob(job);
+        application2.setJob(job1);
         application2.setCoverLetter("Cover Letter 2");
         application2.setCustomResume("Custom Resume 2");
-        job.setApplications(List.of(application1, application2));
+
+        job1.setApplications(List.of(application1, application2));
 
         List<Application> applications = Arrays.asList(application1, application2);
 
@@ -175,7 +174,7 @@ public class JobControllerTest {
     @Test
     @Disabled("Test disabled for pagination.")
     void testPaginationGetJobs() throws Exception {
-        List<Job> jobs = List.of(backendEngineer, frontendEngineer); // Mock 2 Job objects as example
+        List<Job> jobs = List.of(job1, job2); // Mock 2 Job objects as example
         Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
         when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
@@ -195,23 +194,23 @@ public class JobControllerTest {
 
     @Test
     public void testGetAllJobs() throws Exception {
-        when(jobService.getAll()).thenReturn(Arrays.asList(backendEngineer, frontendEngineer));
+        when(jobService.getAll()).thenReturn(Arrays.asList(job1, job2));
 
         mockMvc.perform(get("/job"))
         .andExpect(status().isOk())
         // Check that the json response to the API call is as the same as the JSON representation of backendEngineer and frontendEngineer
-        .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(backendEngineer, frontendEngineer)))); 
+        .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(job1, job2)))); 
         
     }
 
     @Test
     // @Disabled
     public void testGetJob() throws Exception {
-        when(jobService.getJob(1L)).thenReturn(Optional.of(backendEngineer));
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
 
-        mockMvc.perform(get("/job/" + backendEngineer.getId()))
+        mockMvc.perform(get("/job/" + job1.getId()))
         .andExpect(status().isOk())
-        .andExpect(content().json(objectMapper.writeValueAsString(backendEngineer)));
+        .andExpect(content().json(objectMapper.writeValueAsString(job1)));
     }
 
     @Test
@@ -221,7 +220,7 @@ public class JobControllerTest {
 
         mockMvc.perform(post("/job")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(frontendEngineer)))
+                .content(objectMapper.writeValueAsString(job1)))
                 .andExpect(header().string("Location", "/job/1"));
     }
 
@@ -241,14 +240,14 @@ public class JobControllerTest {
 
     @Test
     public void testUpdateJob() throws Exception {
-        when(jobService.getJob(1L)).thenReturn(Optional.of(backendEngineer));
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
         when(jobService.saveJob(any(Job.class))).thenReturn(null);
 
         mockMvc.perform(put("/job/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedEngineer)))
+                .content(objectMapper.writeValueAsString(updatedJob)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(updatedEngineer)));
+                .andExpect(content().json(objectMapper.writeValueAsString(updatedJob)));
     }
 
     @Test
@@ -257,14 +256,14 @@ public class JobControllerTest {
 
         mockMvc.perform(put("/job/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedEngineer)))
+                .content(objectMapper.writeValueAsString(updatedJob)))
                 //updating the line
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testUpdateJobInvalid() throws Exception {
-        when(jobService.getJob(1L)).thenReturn(Optional.of(backendEngineer));
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
 
         // Create an invalid job instance directly within the test
         Job invalidJob = new Job();
@@ -280,13 +279,13 @@ public class JobControllerTest {
 
     @Test
     public void testDeleteExistingJob() throws Exception {
-        when(jobService.getJob(1L)).thenReturn(Optional.of(backendEngineer));
-        doNothing().when(jobService).delete(backendEngineer);
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
+        doNothing().when(jobService).delete(job1);
 
         mockMvc.perform(delete("/job/1"))
                 .andExpect(status().isNoContent());
 
-        verify(jobService, times(1)).delete(backendEngineer);
+        verify(jobService, times(1)).delete(job1);
     }
 
     @Test
