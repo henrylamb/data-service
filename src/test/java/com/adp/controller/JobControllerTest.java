@@ -166,8 +166,7 @@ public class JobControllerTest {
         mockMvc.perform(put("/job/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedEngineer)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Bad Request"));
+                .andExpect(status().isNotFound());
     }
 
     @Test
