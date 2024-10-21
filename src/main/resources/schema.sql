@@ -1,7 +1,7 @@
 -- TODO- should the tables have a drop method to drop the tables if they already exist?
 
 -- Create JOB table
-CREATE TABLE JOBS (
+CREATE TABLE JOB (
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT DEFAULT NULL,
     department VARCHAR(25) DEFAULT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE JOBS (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; 
 
 -- Create an Application table
-CREATE TABLE APPLICATIONS (
+CREATE TABLE APPLICATION (
   `id` int NOT NULL AUTO_INCREMENT,
   `candidate_id` int DEFAULT NULL,
   `candidate_email` varchar(255) DEFAULT NULL,

@@ -7,11 +7,16 @@ import com.adp.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ApplicationService {
     @Autowired
     public ApplicationRepository repo;
 
+    public List<Application> findAllGivenJobId(Long jobId) {
+        return repo.findByJobId(jobId);
+    }
 
 
     public Application getApplication(long id) {
