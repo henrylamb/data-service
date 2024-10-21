@@ -73,7 +73,7 @@ public class JobController {
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);
         if (job.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         jobService.delete(job.get());
         return ResponseEntity.noContent().build();

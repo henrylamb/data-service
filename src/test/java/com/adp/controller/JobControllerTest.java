@@ -52,11 +52,11 @@ public class JobControllerTest {
     void setup() {
     }
 
-    @Test 
+    @Test
     @Disabled
     void testPaginationGetJobs() throws Exception {
         // Arrange
-        List<Job> jobs = List.of(new Job(), new Job());  // Mock 2 Job objects as example
+        List<Job> jobs = List.of(new Job(), new Job()); // Mock 2 Job objects as example
         jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
         // Assign
@@ -64,13 +64,13 @@ public class JobControllerTest {
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/job")
-                        .param("page", "0")
-                        .param("items", "20")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .param("page", "0")
+                .param("items", "20")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2))  // Expecting 2 jobs in the content
-                .andExpect(jsonPath("$.totalPages").value(1))  // Now expecting 1 total page
+                .andExpect(jsonPath("$.content.length()").value(2)) // Expecting 2 jobs in the content
+                .andExpect(jsonPath("$.totalPages").value(1)) // Now expecting 1 total page
                 .andExpect(jsonPath("$.totalElements").value(2));
 
         // Verifying the service method was called exactly once
@@ -78,7 +78,9 @@ public class JobControllerTest {
     }
 
     // TODO figure out how to deal with the date issue
-    private Job createMockJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription, String additionalInformation, String listingStatus, String experienceLevel, String modelResume, String modelCoverLetter) {
+    private Job createMockJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription,
+            String additionalInformation, String listingStatus, String experienceLevel, String modelResume,
+            String modelCoverLetter) {
         Job job = new Job();
         job.setId(id);
         job.setDepartment(department);
@@ -97,9 +99,15 @@ public class JobControllerTest {
     public void testGetAll() throws Exception {
         // Arrange
         // Create two jobs
-        Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+        Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+                "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+                "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+                "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-        Job job2 = createMockJob(2L, "Engineering", "Backend Developer", "Java Developer", "Develop scalable backend services using Java, Spring Boot, and MySQL.", "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open", "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
+        Job job2 = createMockJob(2L, "Engineering", "Backend Developer", "Java Developer",
+                "Develop scalable backend services using Java, Spring Boot, and MySQL.",
+                "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open",
+                "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
 
         // Mock what the service should do
         when(jobService.getAll())
@@ -108,145 +116,163 @@ public class JobControllerTest {
         // Assert
         mockMvc.perform(get("/job"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{'id':1,'department':'Engineering','listingTitle':'Frontend Developer','jobTitle':'React Developer','jobDescription':'Design and develop responsive user interfaces using React, JavaScript, and CSS.','additionalInformation':'Work with the UX/UI team to create seamless user experiences.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Frontend Developer','modelCoverLetter':'Sample Cover Letter for Frontend Developer'}," + "{'id':2,'department':'Engineering','listingTitle':'Backend Developer','jobTitle':'Java Developer','jobDescription':'Develop scalable backend services using Java, Spring Boot, and MySQL.','additionalInformation':'Collaborate with the front-end team to integrate APIs and optimize system performance.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Backend Developer','modelCoverLetter':'Sample Cover Letter for Backend Developer'}]")
-                );
+                .andExpect(content().json(
+                        "[{'id':1,'department':'Engineering','listingTitle':'Frontend Developer','jobTitle':'React Developer','jobDescription':'Design and develop responsive user interfaces using React, JavaScript, and CSS.','additionalInformation':'Work with the UX/UI team to create seamless user experiences.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Frontend Developer','modelCoverLetter':'Sample Cover Letter for Frontend Developer'},"
+                                + "{'id':2,'department':'Engineering','listingTitle':'Backend Developer','jobTitle':'Java Developer','jobDescription':'Develop scalable backend services using Java, Spring Boot, and MySQL.','additionalInformation':'Collaborate with the front-end team to integrate APIs and optimize system performance.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Backend Developer','modelCoverLetter':'Sample Cover Letter for Backend Developer'}]"));
     }
 
     // @Test
     // @Disabled
     // public void testGetCustomer() throws Exception {
-    //   // Arrange
-    //   Customer customer = new Customer();
-    //   customer.setId(1L);
-    //   customer.setName("John Doe");
+    // // Arrange
+    // Customer customer = new Customer();
+    // customer.setId(1L);
+    // customer.setName("John Doe");
 
-    //   // Assign
-    //   when(customerService.getCustomer(1L)).thenReturn(Optional.of(customer));
+    // // Assign
+    // when(customerService.getCustomer(1L)).thenReturn(Optional.of(customer));
 
-    //   // Act & Assert
-    //   mockMvc.perform(get("/customers/1"))
-    //       .andExpect(status().isOk())
-    //       .andExpect(content().json("{'id':1,'name':'John Doe'}"));
+    // // Act & Assert
+    // mockMvc.perform(get("/customers/1"))
+    // .andExpect(status().isOk())
+    // .andExpect(content().json("{'id':1,'name':'John Doe'}"));
     // }
 
     @Test
     // @Disabled
     public void testAddJob() throws Exception {
-      // Arrange
-      URI location = new URI("/job/1");
+        // Arrange
+        URI location = new URI("/job/1");
 
-      // Assign
-      when(jobService.saveJob(any(Job.class))).thenReturn(location);
+        // Assign
+        when(jobService.saveJob(any(Job.class))).thenReturn(location);
 
-      // Act & Assert
-      mockMvc.perform(post("/job")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(new ObjectMapper().writeValueAsString(createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer")))
-          )
-          .andExpect(header().string("Location", "/job/1"));
+        // Act & Assert
+        mockMvc.perform(post("/job")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper()
+                        .writeValueAsString(createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+                                "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+                                "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+                                "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer"))))
+                .andExpect(header().string("Location", "/job/1"));
     }
 
     @Test
     public void testAddJobInvalid() throws Exception {
-    // Arrange
-    Job invalidJob = new Job();
-    invalidJob.setId(1L);
-    invalidJob.setDepartment("Engineering");
-    invalidJob.setListingTitle("null");
-    // Act & Assert
-    mockMvc.perform(post("/job")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(new ObjectMapper().writeValueAsString(invalidJob)))
-        .andExpect(status().isBadRequest());
-  }
+        // Arrange
+        Job invalidJob = new Job();
+        invalidJob.setId(1L);
+        invalidJob.setDepartment("Engineering");
+        invalidJob.setListingTitle("null");
+        // Act & Assert
+        mockMvc.perform(post("/job")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(invalidJob)))
+                .andExpect(status().isBadRequest());
+    }
 
-  @Test
-  public void testUpdateJob() throws Exception {
-    // Arrange
-    Job existingJob = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+    @Test
+    public void testUpdateJob() throws Exception {
+        // Arrange
+        Job existingJob = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+                "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+                "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+                "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-    Job updateJob = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer", "Develop scalable backend services using Java, Spring Boot, and MySQL.", "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open", "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
+        Job updateJob = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer",
+                "Develop scalable backend services using Java, Spring Boot, and MySQL.",
+                "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open",
+                "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
 
-    // Assign
-    when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
-    when(jobService.saveJob(any(Job.class))).thenReturn(null);
+        // Assign
+        when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
+        when(jobService.saveJob(any(Job.class))).thenReturn(null);
 
-    // Act & Assert
-    mockMvc.perform(put("/job/1")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(new ObjectMapper().writeValueAsString(updateJob)))
-        .andExpect(status().isOk())
-        .andExpect(content().json(
-             "{'id':1,'department':'Engineering','listingTitle':'Backend Developer','jobTitle':'Java Developer','jobDescription':'Develop scalable backend services using Java, Spring Boot, and MySQL.','additionalInformation':'Collaborate with the front-end team to integrate APIs and optimize system performance.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Backend Developer','modelCoverLetter':'Sample Cover Letter for Backend Developer'}"));
-}
+        // Act & Assert
+        mockMvc.perform(put("/job/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(updateJob)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        "{'id':1,'department':'Engineering','listingTitle':'Backend Developer','jobTitle':'Java Developer','jobDescription':'Develop scalable backend services using Java, Spring Boot, and MySQL.','additionalInformation':'Collaborate with the front-end team to integrate APIs and optimize system performance.','listingStatus':'Open','experienceLevel':'Mid-level','modelResume':'Sample Resume for Backend Developer','modelCoverLetter':'Sample Cover Letter for Backend Developer'}"));
+    }
 
-@Test
-public void testUpdateJobNotFound() throws Exception {
-  // Arrange
-  Job updatedJob = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer", "Develop scalable backend services using Java, Spring Boot, and MySQL.", "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open", "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
+    @Test
+    public void testUpdateJobNotFound() throws Exception {
+        // Arrange
+        Job updatedJob = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer",
+                "Develop scalable backend services using Java, Spring Boot, and MySQL.",
+                "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open",
+                "Mid-level", "Sample Resume for Backend Developer", "Sample Cover Letter for Backend Developer");
 
-  // Assign
-  when(jobService.getJob(1L)).thenReturn(Optional.empty());
+        // Assign
+        when(jobService.getJob(1L)).thenReturn(Optional.empty());
 
-  // Act & Assert
-  mockMvc.perform(put("/job/1")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(new ObjectMapper().writeValueAsString(updatedJob)))
-      .andExpect(status().isBadRequest())
-      .andExpect(content().string("Bad Request"));
-}
+        // Act & Assert
+        mockMvc.perform(put("/job/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(updatedJob)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Bad Request"));
+    }
 
-@Test
-public void testUpdateJobInvalid() throws Exception {
-  // Arrange
-  Job existingJob = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+    @Test
+    public void testUpdateJobInvalid() throws Exception {
+        // Arrange
+        Job existingJob = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+                "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+                "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+                "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-  // Invalid job with an empty jobTitle
-  Job invalidJob = new Job();
-  invalidJob.setId(1L);
-  invalidJob.setDepartment("Engineering");
-  invalidJob.setListingTitle("null");
+        // Invalid job with an empty jobTitle
+        Job invalidJob = new Job();
+        invalidJob.setId(1L);
+        invalidJob.setDepartment("Engineering");
+        invalidJob.setListingTitle("null");
 
-  // Assign
-  when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
+        // Assign
+        when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
 
-  // Act & Assert
-  mockMvc.perform(put("/job/1")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(new ObjectMapper().writeValueAsString(invalidJob)))
-      .andExpect(status().isBadRequest())
-      .andExpect(content().string("Bad Request"));
-}
+        // Act & Assert
+        mockMvc.perform(put("/job/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(invalidJob)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Bad Request"));
+    }
 
-//when you try to delete the objects that does exist you will have a response 204 not 404
-@Test
-public void testDeleteExistingJob() throws Exception {
-  // Arrange
-  Long jobId=1L;
-  Job existingJob = createMockJob(jobId, "Engineering", "Frontend Developer", "React Developer", "Design and develop responsive user interfaces using React, JavaScript, and CSS.", "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level", "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
+    // when you try to delete the objects that does exist you will have a response
+    // 204 not 404
+    @Test
+    public void testDeleteExistingJob() throws Exception {
+        // Arrange
+        Long jobId = 1L;
+        Job existingJob = createMockJob(jobId, "Engineering", "Frontend Developer", "React Developer",
+                "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
+                "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
+                "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-  // Mocking that the job exists when jobService.getJob is called
-  when(jobService.getJob(jobId)).thenReturn(Optional.of(existingJob));
-  
-  // Mocking the job deletion success
-  doNothing().when(jobService).delete(existingJob);
+        // Mocking that the job exists when jobService.getJob is called
+        when(jobService.getJob(jobId)).thenReturn(Optional.of(existingJob));
 
-  // Act & Assert
-  mockMvc.perform(delete("/job/1", jobId))
-      .andExpect(status().isNoContent());
+        // Mocking the job deletion success
+        doNothing().when(jobService).delete(existingJob);
 
-      verify(jobService, times(1)).delete(existingJob);
+        // Act & Assert
+        mockMvc.perform(delete("/job/1", jobId))
+                .andExpect(status().isNoContent());
 
-}
+        verify(jobService, times(1)).delete(existingJob);
+    }
 
-    // @Test
-    // @Disabled
-    // public void testDeleteCustomerNotFound() throws Exception {
-    //   // Assign
-    //   when(customerService.getCustomer(1L)).thenReturn(Optional.empty());
+    @Test
+    public void testDeleteJobNotFound() throws Exception {
+        // Assign
+        when(jobService.getJob(1L)).thenReturn(Optional.empty());
 
-    //   // Act & Assert
-    //   mockMvc.perform(delete("/customers/1"))
-    //       .andExpect(status().isBadRequest());
-    // }
+        // Act & Assert
+        mockMvc.perform(delete("/job/1"))
+                .andExpect(status().isNotFound());
+    }
 }
