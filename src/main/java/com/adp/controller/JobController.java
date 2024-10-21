@@ -43,7 +43,7 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Job> getJob(@PathVariable long id) {
+    public Optional<Job> getJob(@PathVariable("id") long id) {
         return jobService.getJob(id);
     }
 
@@ -67,20 +67,20 @@ public class JobController {
       //return error when trying to update a job that doesnt exist
       Optional<Job> optionalJob = jobService.getJob(id);
       if (optionalJob.isEmpty() || job.getId() != id || !isJobValid(job)) {
-        return ResponseEntity.badRequest().body("Bad Request");
+        return ResponseEntity.notFound().build();
       }
       jobService.saveJob(job);
       return ResponseEntity.ok(job);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable long id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);
         if (job.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         jobService.delete(job.get());
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 
     private boolean isJobValid(Job job) {

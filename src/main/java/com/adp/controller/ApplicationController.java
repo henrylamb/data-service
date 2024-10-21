@@ -48,4 +48,20 @@ public class ApplicationController {
         return ResponseEntity.ok(applications);
     }
     
+    @PostMapping
+    public ResponseEntity<Application> addApplication(@RequestBody Application application) {
+     if (!isApplicationValid(application)) {
+        return ResponseEntity.badRequest().build();
+     }
+
+        applicationService.saveApplication(application);
+        return ResponseEntity.status(201).body(application);
+}
+
+
+private boolean isApplicationValid(Application application) {
+    return application.getJobId() != null && application.getCandidateEmail() != null 
+    && application.getCandidateId() != null;
+}
+
 }
