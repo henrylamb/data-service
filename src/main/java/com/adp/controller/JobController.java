@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.adp.domain.Job;
+import com.adp.domain.JobTransferRequest;
 import com.adp.service.JobService;
 
 @RestController
@@ -70,9 +71,26 @@ public class JobController {
         return ResponseEntity.badRequest().build();
       }
       jobService.saveJob(job);
-      return ResponseEntity.ok(job);
+      return ResponseEntity.ok(job); // This returns the job in the response body
     }
 
+    @PutMapping("/transfer")
+    public ResponseEntity<?> transferJobToNewHiringManager(@RequestBody JobTransferRequest request) {
+
+    Optional<Job> optionalJob = jobService.getJob(request.getJobId());  
+
+    if (optionalJob.isEmpty()) {  
+        return ResponseEntity.notFound().build();
+    }
+
+    jobService.transferJobToNewHiringManager(request);
+    
+    Optional<Job> updatedJob = jobService.getJob(request.toUserId); // Fetch the updated job
+    return ResponseEntity.ok(updatedJob); 
+
+    }
+
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);
