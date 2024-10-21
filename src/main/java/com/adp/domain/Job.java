@@ -2,9 +2,12 @@ package com.adp.domain;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.List;
+
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 
 @Entity
-@Table(name="JOBS")
+@Table(name="JOB")
 public class Job {
 
     @Id
@@ -46,6 +49,8 @@ public class Job {
     @Column(name="model_cover_letter")
     private String modelCoverLetter;
 
+    @OneToMany(mappedBy="job")
+    private List<Application> applications;
 
     // Getters and Setters
 
@@ -143,6 +148,14 @@ public class Job {
 
     public void setModelCoverLetter(String modelCoverLetter) {
         this.modelCoverLetter = modelCoverLetter;
+    }
+
+    public List<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
     }
 
 }
