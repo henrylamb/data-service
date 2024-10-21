@@ -58,10 +58,8 @@ public class JobControllerTest {
                 "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
                 "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
 
-        updatedEngineer = createMockJob(1L, "Engineering", "Backend Developer", "Java Developer",
-                "Develop scalable backend services using Java, Spring Boot, and MySQL.",
-                "Collaborate with the front-end team to integrate APIs and optimize system performance.", "Open",
-                "Senior", "Updated Resume for Backend Developer", "Updated Cover Letter for Backend Developer");
+        updatedEngineer = createMockJob(1L, "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED", "UPDATED",
+                "UPDATED", "UPDATED");
     }
 
     private Job createMockJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription,
@@ -81,19 +79,6 @@ public class JobControllerTest {
         return job;
     }
 
-    // Helper method that makes a GET request to /job/{id} and asserts that the response is the JSON representation of the given Job object
-    private void assertJobJson(Job job) throws Exception {
-        mockMvc.perform(get("/job/" + job.getId()))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(job)));
-    }
-
-    // Helper method that makes a GET request to /job and asserts that the response is the JSON representation of the given list of Job objects
-    private void assertJobListJson(List<Job> jobs) throws Exception {
-        mockMvc.perform(get("/job"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(jobs)));
-    }
 
     @Test
     @Disabled("Test disabled for pagination.")
@@ -120,15 +105,21 @@ public class JobControllerTest {
     public void testGetAllJobs() throws Exception {
         when(jobService.getAll()).thenReturn(Arrays.asList(backendEngineer, frontendEngineer));
 
-        assertJobListJson(Arrays.asList(backendEngineer, frontendEngineer));
+        mockMvc.perform(get("/job"))
+        .andExpect(status().isOk())
+        // Check that the json response to the API call is as the same as the JSON representation of backendEngineer and frontendEngineer
+        .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(backendEngineer, frontendEngineer)))); 
+        
     }
 
     @Test
-    // @Disabled("Test disabled for getting specific job.")
+    // @Disabled
     public void testGetJob() throws Exception {
         when(jobService.getJob(1L)).thenReturn(Optional.of(backendEngineer));
 
-        assertJobJson(backendEngineer);
+        mockMvc.perform(get("/job/" + backendEngineer.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().json(objectMapper.writeValueAsString(backendEngineer)));
     }
 
     @Test
@@ -170,7 +161,7 @@ public class JobControllerTest {
 
     @Test
     public void testUpdateJobNotFound() throws Exception {
-        when(jobService.getJob(1L)).thenReturn(Optional.empty());
+        when(jobService.getJob(1L)).thenReturn(Optional.empty()); // simulates the scenario where a job with ID 1 does not exist in the database.
 
         mockMvc.perform(put("/job/1")
                 .contentType(MediaType.APPLICATION_JSON)
