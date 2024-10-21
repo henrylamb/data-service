@@ -218,23 +218,29 @@ public void testUpdateJobInvalid() throws Exception {
       .andExpect(content().string("Bad Request"));
 }
 
-    // @Test
+@Test
     // @Disabled
-    // public void testDeleteCustomer() throws Exception {
-    //   // Arrange
-    //   Customer existingCustomer = new Customer();
-    //   existingCustomer.setId(1L);
-    //   existingCustomer.setName("John Doe");
-    //   existingCustomer.setEmail("john.doe@example.com");
-    //   existingCustomer.setPassword("password");
+    public void testDeleteExistingJob() throws Exception {
+      // Arrange
+      Job existingJob = new Job();
+      existingJob.setId(1L);
+      existingJob.setDepartment("Engineering");
+      existingJob.setListingTitle("Frontend Developer");
+      existingJob.setJobTitle("React Developer");
+      existingJob.setJobDescription("Design and develop responsive user interfaces using React, JavaScript, and CSS.");
+      existingJob.setAdditionalInformation("Work with the UX/UI team to create seamless user experiences.");
+      existingJob.setListingStatus("Open");
+      existingJob.setExperienceLevel("Mid-level");
+      existingJob.setModelResume("Sample Resume for Frontend Developer");
+      existingJob.setModelCoverLetter("Sample Cover Letter for Frontend Developer");
+      
+      // Assign
+      when(jobService.getJob(1L)).thenReturn(Optional.of(existingJob));
 
-    //   // Assign
-    //   when(customerService.getCustomer(1L)).thenReturn(Optional.of(existingCustomer));
-
-    //   // Act & Assert
-    //   mockMvc.perform(delete("/customers/1"))
-    //       .andExpect(status().isNotFound());
-    // }
+      // Act & Assert
+      mockMvc.perform(delete("/job/1"))
+          .andExpect(status().isNotFound());
+    }
 
     // @Test
     // @Disabled
