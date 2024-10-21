@@ -52,8 +52,9 @@ public class JobControllerTest {
     void setup() {
     }
 
-    @Test
-    void testGetJobs() throws Exception {
+    @Test 
+    // @Disabled
+    void testPaginationGetJobs() throws Exception {
         // Arrange
         List<Job> jobs = List.of(new Job(), new Job());  // Mock 2 Job objects as example
         jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
