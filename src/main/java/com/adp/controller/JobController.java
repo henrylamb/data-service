@@ -39,7 +39,7 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Job> getJob(@PathVariable long id) {
+    public Optional<Job> getJob(@PathVariable("id") long id) {
         return jobService.getJob(id);
     }
 
