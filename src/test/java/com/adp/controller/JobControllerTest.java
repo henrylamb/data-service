@@ -185,13 +185,32 @@ public class JobControllerTest {
                 .param("items", "20")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2)) // Expecting 2 jobs in the content
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2)) // Expecting 2 jobs in the content
                 .andExpect(jsonPath("$.totalPages").value(1)) // Now expecting 1 total page
                 .andExpect(jsonPath("$.totalElements").value(2));
 
         verify(jobService, times(1)).getPaginatedJobs(0, 20);
     }
+
+    @Test
+void testPaginationGetJobs2() throws Exception {
+    List<Job> jobs = List.of(job1, job2); // Mock 2 Job objects as example
+    Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
+
+    when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
+
+    mockMvc.perform(get("/job")
+            .param("page", "0")
+            .param("items", "20")
+            .contentType(MediaType.APPLICATION_JSON))
+            // Zobaczymy pełną odpowiedź
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.").isArray()) // Sprawdzenie tablicy
+            .andExpect(jsonPath("$.length()").value(2)); // Oczekiwane 2 elementy w content
+
+    verify(jobService, times(1)).getPaginatedJobs(0, 20);
+}
 
     @Test
     public void testGetAllJobs() throws Exception {

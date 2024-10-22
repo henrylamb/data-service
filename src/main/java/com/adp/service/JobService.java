@@ -32,7 +32,11 @@ public class JobService{
 
     public Page<Job> getPaginatedJobs(int pageNumber, int size) {
         Pageable pageable = PageRequest.of(pageNumber, size);
-        return repo.findAll(pageable);
+        //added by Kate
+        Page<Job> jobs = repo.findAll(pageable);
+        System.out.println("Jobs found:" + jobs.getContent().size());
+        return jobs;
+        //return repo.findAll(pageable);
     }
 
     public Iterable<Job> getAll(){
