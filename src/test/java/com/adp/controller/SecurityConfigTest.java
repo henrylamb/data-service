@@ -56,9 +56,9 @@ public class SecurityConfigTest {
         Mockito.when(jobService.getJob(jobId)).thenReturn(Optional.of(job));
 
         mockMvc.perform(get("/job/{id}", jobId)
-                .with(jwt().jwt(jwt -> jwt.claim("role", "CANDIDATE"))))
+                .with(jwt().jwt(jwt -> jwt.claim("role", "CANDIDATE")))) // This creates a JWT with the role "CANDIDATE"
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((int) jobId)))
-                .andExpect(jsonPath("$.title", is("Software Engineer")));
+                .andExpect(jsonPath("$.listingTitle", is("Software Engineer")));
     }
 }
