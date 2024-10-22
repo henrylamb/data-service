@@ -242,7 +242,7 @@ public class JobControllerTest {
     }
 
     @Test
-    public void testTransferExistingJobToHiringManager() throws Exception {
+    public void testSetNewIDExistingJob() throws Exception {
         // Arrange
         // job1 and updatedJob from setup above 
         
@@ -268,6 +268,31 @@ public class JobControllerTest {
                 .content(objectMapper.writeValueAsString(transferRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(4L));
+    }
+
+    @Test
+    public void testSetNewIDNonExistingJob() throws Exception {
+        // Arrange
+        // job1 and updatedJob from setup above 
+        
+        JobTransferRequest transferRequest = new JobTransferRequest(); // Creating the request that will be passed in the body of the PUT request
+        transferRequest.setJobId(1L); // The job with ID 1
+        transferRequest.setFromUserId(2L); // Current manager is user 2
+        transferRequest.setToUserId(4L); // New manager is user 4
+
+        // Mock the call to getJob before the transfer
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));  // This simulates fetching the job before transfer
+
+        // Mock the transfer operation
+        when(jobService.transferJobToNewHiringManager(any(JobTransferRequest.class))).thenReturn(false);
+
+
+        // Act & Assert
+        mockMvc.perform(put("/job/transfer")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(transferRequest)))
+            .andExpect(status().isNotFound()) // Expect 404 Not Found when the transfer operation fails
+            .andExpect(content().string(""));
     }
 
 
