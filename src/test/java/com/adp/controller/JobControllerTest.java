@@ -1,7 +1,6 @@
 package com.adp.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,8 +33,6 @@ import com.adp.domain.Job;
 import com.adp.domain.JobTransferRequest;
 import com.adp.service.JobService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -74,8 +71,9 @@ public class JobControllerTest {
                 "UPDATED", "UPDATED");
     }
 
-        
-    private Job createJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription, String additionalInformation, String listingStatus, String experienceLevel, String modelResume, String modelCoverLetter) {
+    private Job createJob(Long id, String department, String listingTitle, String jobTitle, String jobDescription,
+            String additionalInformation, String listingStatus, String experienceLevel, String modelResume,
+            String modelCoverLetter) {
         Job job = new Job();
         job.setId(id);
         job.setDepartment(department);
@@ -90,7 +88,8 @@ public class JobControllerTest {
         return job;
     }
 
-    private Application createApplication(Long id, Long candidateId, String candidateEmail, Job job, String coverLetter, String customResume) {
+    private Application createApplication(Long id, Long candidateId, String candidateEmail, Job job, String coverLetter,
+            String customResume) {
         Application application = new Application();
         application.setId(id);
         application.setCandidateId(candidateId);
@@ -101,27 +100,25 @@ public class JobControllerTest {
         return application;
     }
 
-
     @Test
     void testGetPaginatedJobs() throws Exception {
         // Arrange
-        List<Job> jobs = List.of(job1, job2);  // Mock 2 Job objects as example
+        List<Job> jobs = List.of(job1, job2); // Mock 2 Job objects as example
         Page<Job> jobPage = new PageImpl<>(jobs, PageRequest.of(0, 20), 2);
 
         // Assign
         when(jobService.getPaginatedJobs(0, 20)).thenReturn(jobPage);
 
         // Act & Assert
-        MvcResult result = this.mockMvc.perform(get("/job?page=0&items=20"))
+
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.get("/job/page")
+                    .param("page", "0")
+                    .param("items", "20"))
                 .andExpect(status().isOk())
                 .andReturn();
         String json = result.getResponse().getContentAsString();
-        System.out.println(json);
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, Job.class);
-        List<Job> returnedJobs = objectMapper.readValue(json, collectionType);
 
-        assertNotNull(returnedJobs);
-        assertEquals(2, returnedJobs.size());
+        assertThat(json.contains("\"numberOfElements\":2")).isTrue();
         // Verifying the service method was called exactly once
         verify(jobService, times(1)).getPaginatedJobs(0, 20);
     }
@@ -130,8 +127,10 @@ public class JobControllerTest {
     void testGetApplications() throws Exception {
         // Arrange
 
-        Application application1 = createApplication(1L, 1L, "candidate1@example.com", job1, "Cover Letter 1", "Custom Resume 1");
-        Application application2 = createApplication(2L, 2L, "candidate2@example.com", job1, "Cover Letter 2", "Custom Resume 2");
+        Application application1 = createApplication(1L, 1L, "candidate1@example.com", job1, "Cover Letter 1",
+                "Custom Resume 1");
+        Application application2 = createApplication(2L, 2L, "candidate2@example.com", job1, "Cover Letter 2",
+                "Custom Resume 2");
 
         job1.setApplications(List.of(application1, application2));
 
@@ -170,10 +169,11 @@ public class JobControllerTest {
         when(jobService.getAll()).thenReturn(Arrays.asList(job1, job2));
 
         mockMvc.perform(get("/job"))
-        .andExpect(status().isOk())
-        // Check that the json response to the API call is as the same as the JSON representation of backendEngineer and frontendEngineer
-        .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(job1, job2)))); 
-        
+                .andExpect(status().isOk())
+                // Check that the json response to the API call is as the same as the JSON
+                // representation of backendEngineer and frontendEngineer
+                .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(job1, job2))));
+
     }
 
     @Test
@@ -182,8 +182,8 @@ public class JobControllerTest {
         when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
 
         mockMvc.perform(get("/job/" + job1.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().json(objectMapper.writeValueAsString(job1)));
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(job1)));
     }
 
     @Test
@@ -225,44 +225,53 @@ public class JobControllerTest {
 
     @Test
     public void testUpdateJobNotFound() throws Exception {
-        when(jobService.getJob(1L)).thenReturn(Optional.empty()); // simulates the scenario where a job with ID 1 does not exist in the database.
+        when(jobService.getJob(1L)).thenReturn(Optional.empty()); // simulates the scenario where a job with ID 1 does
+                                                                  // not exist in the database.
 
         mockMvc.perform(put("/job/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedJob)))
-                //updating the line
+                // updating the line
                 .andExpect(status().isBadRequest());
     }
 
-//     @Test
-//     @Disabled
-// public void testTransferJobToHiringManager() throws Exception {
-//     // Arrange
-//     Job job1 = createJob(1L, "Engineering", "Frontend Developer", "React Developer",
-//             "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
-//             "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
-//             "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
-//     Job updatedJob = createJob(1L, "Engineering", "Frontend Developer", "React Developer",
-//             "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
-//             "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
-//             "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
-//     updatedJob.setUserId(2L); // Assuming userID is the field to be updated
+    // @Test
+    // @Disabled
+    // public void testTransferJobToHiringManager() throws Exception {
+    // // Arrange
+    // Job job1 = createJob(1L, "Engineering", "Frontend Developer", "React
+    // Developer",
+    // "Design and develop responsive user interfaces using React, JavaScript, and
+    // CSS.",
+    // "Work with the UX/UI team to create seamless user experiences.", "Open",
+    // "Mid-level",
+    // "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend
+    // Developer");
+    // Job updatedJob = createJob(1L, "Engineering", "Frontend Developer", "React
+    // Developer",
+    // "Design and develop responsive user interfaces using React, JavaScript, and
+    // CSS.",
+    // "Work with the UX/UI team to create seamless user experiences.", "Open",
+    // "Mid-level",
+    // "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend
+    // Developer");
+    // updatedJob.setUserId(2L); // Assuming userID is the field to be updated
 
-//     JobTransferRequest transferRequest = new JobTransferRequest();
-//     transferRequest.setJobId(1L);
-//     transferRequest.setNewUserId(2L);
+    // JobTransferRequest transferRequest = new JobTransferRequest();
+    // transferRequest.setJobId(1L);
+    // transferRequest.setNewUserId(2L);
 
-//     when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
-//     doNothing().when(jobService).transferJobToNewHiringManager(any(JobTransferRequest.class));
-//     when(jobService.getJob(1L)).thenReturn(Optional.of(updatedJob));
+    // when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
+    // doNothing().when(jobService).transferJobToNewHiringManager(any(JobTransferRequest.class));
+    // when(jobService.getJob(1L)).thenReturn(Optional.of(updatedJob));
 
-//     // Act & Assert
-//     mockMvc.perform(put("/job/transfer")
-//             .contentType(MediaType.APPLICATION_JSON)
-//             .content(objectMapper.writeValueAsString(transferRequest)))
-//             .andExpect(status().isOk())
-//             .andExpect(jsonPath("$.userId").value(2L));
-// }
+    // // Act & Assert
+    // mockMvc.perform(put("/job/transfer")
+    // .contentType(MediaType.APPLICATION_JSON)
+    // .content(objectMapper.writeValueAsString(transferRequest)))
+    // .andExpect(status().isOk())
+    // .andExpect(jsonPath("$.userId").value(2L));
+    // }
 
     @Test
     public void testUpdateJobInvalid() throws Exception {
@@ -298,6 +307,5 @@ public class JobControllerTest {
         mockMvc.perform(delete("/job/1"))
                 .andExpect(status().isNotFound());
     }
-
 
 }

@@ -23,8 +23,9 @@ public class JobController {
 
     // url: ../api/job?page=page&items=items
     @GetMapping(value = "/page")
-    public ResponseEntity<Page<Job>> getPaginatedJobs(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int items) {
+    public ResponseEntity<Page<Job>> getPaginatedJobs(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "items", defaultValue = "20") int items) {
         return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
     }
 
@@ -41,14 +42,17 @@ public class JobController {
 
     // url: ../api/job/search?value=value&page=page&items=items all users
     @GetMapping(value = "/search")
-    public ResponseEntity<?> getSearchResult(@RequestParam String value, @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<?> getSearchResult(
+            @RequestParam(name = "value") String value,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int items) {
+
         Page<Job> jobs = jobService.getPagesFromSearch(value, page, items);
 
         if (jobs.getTotalElements() > 0) {
             return ResponseEntity.ok(jobs);
         }
-        return ResponseEntity.ok("Error"); //TODO revisit
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
