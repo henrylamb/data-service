@@ -8,6 +8,7 @@ import com.adp.service.ApplicationService;
 import java.util.Optional;
 
 import com.adp.service.JobService;
+import org.objectGeneration.client.Res;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +33,20 @@ public class ApplicationController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(optApplication.get());
+    }
+
+    @GetMapping("/{id}/statistics")
+    public ResponseEntity<Application> getApplicationStatistics(@PathVariable("id") long id) {
+        Optional<Application> optApplication = applicationService.getApplication(id);
+        if(optApplication.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Application application = optApplication.get();
+        application.statisticsOnly();
+
+
+        return ResponseEntity.ok(application);
     }
 
     @DeleteMapping("/{id}")
@@ -108,6 +123,9 @@ public class ApplicationController {
     public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
         System.out.println(applicationReq);
       Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
+
+
+
 
         Application application = applicationReq.convertToApplication();
 

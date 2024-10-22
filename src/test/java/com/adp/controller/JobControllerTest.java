@@ -242,34 +242,59 @@ public class JobControllerTest {
     }
 
     @Test
-public void testTransferJobToHiringManager() throws Exception {
-    // Arrange
-    Job job1 = createJob(1L, "Engineering", "Frontend Developer", "React Developer",
-            "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
-            "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
-            "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
-    Job updatedJob = createJob(1L, "Engineering", "Frontend Developer", "React Developer",
-            "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
-            "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
-            "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
-    updatedJob.setUserId(2L); // Assuming userID is the field to be updated
+    public void testSetNewIDExistingJob() throws Exception {
+        // Arrange
+        // job1 and updatedJob from setup above 
+        
+        JobTransferRequest transferRequest = new JobTransferRequest(); // Creating the request that will be passed in the body of the PUT request
+        transferRequest.setJobId(1L); // The job with ID 1
+        transferRequest.setFromUserId(2L); // Current manager is user 2
+        transferRequest.setToUserId(4L); // New manager is user 4
 
-    JobTransferRequest transferRequest = new JobTransferRequest();
-    transferRequest.setJobId(1L); // Create the job with ID 1
-    transferRequest.setFromUserId(2L); // Current manager is user 2
-    transferRequest.setToUserId(4L); // New manager is user 4
+        updatedJob.setUserId(4L); // Reassign the userId to be that of the new hiring manager
 
-    when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
-    doNothing().when(jobService).transferJobToNewHiringManager(any(JobTransferRequest.class));
-    when(jobService.getJob(1L)).thenReturn(Optional.of(updatedJob));
+        // Mock the call to getJob before the transfer
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));  // This simulates fetching the job before transfer
 
-    // Act & Assert
-    mockMvc.perform(put("/job/transfer")
+        // Mock the transfer operation
+        when(jobService.transferJobToNewHiringManager(any(JobTransferRequest.class))).thenReturn(true);
+
+        // Mock the call to getJob after the transfer
+        when(jobService.getJob(1L)).thenReturn(Optional.of(updatedJob));  // Simulate fetching the job after transfer, updated with userId 4
+
+        // Act & Assert
+        mockMvc.perform(put("/job/transfer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(transferRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(4L));
+    }
+
+    @Test
+    public void testSetNewIDNonExistingJob() throws Exception {
+        // Arrange
+        // job1 and updatedJob from setup above 
+        
+        JobTransferRequest transferRequest = new JobTransferRequest(); // Creating the request that will be passed in the body of the PUT request
+        transferRequest.setJobId(1L); // The job with ID 1
+        transferRequest.setFromUserId(2L); // Current manager is user 2
+        transferRequest.setToUserId(4L); // New manager is user 4
+
+        // Mock the call to getJob before the transfer
+        when(jobService.getJob(1L)).thenReturn(Optional.of(job1));  // This simulates fetching the job before transfer
+
+        // Mock the transfer operation
+        when(jobService.transferJobToNewHiringManager(any(JobTransferRequest.class))).thenReturn(false);
+
+
+        // Act & Assert
+        mockMvc.perform(put("/job/transfer")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(transferRequest)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.userId").value(2L));
-}
+            .andExpect(status().isNotFound()) // Expect 404 Not Found when the transfer operation fails
+            .andExpect(content().string(""));
+    }
+
 
     @Test
     public void testUpdateJobInvalid() throws Exception {
