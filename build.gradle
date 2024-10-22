@@ -14,11 +14,18 @@ version = '0.0.1-SNAPSHOT'
 // }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    // maven {
+    //     name = "GitHubPackages"
+    //     url = uri("https://maven.pkg.github.com/henrylamb/object-generation-java")
+    //     credentials {
+    //         username = project.findProperty("gpr.user") as String ?: System.getenv("GITHUB_ACTOR")
+    //         password = project.findProperty("gpr.token") as String ?: System.getenv("GITHUB_TOKEN")
+    //     }
+    // }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -27,10 +34,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'com.h2database:h2' // or any other database you are using
-    // other dependencies
+	compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+    // implementation 'org.objectGeneration:generation-on-rails-java:1.2'
 }
 
 tasks.named('test') {

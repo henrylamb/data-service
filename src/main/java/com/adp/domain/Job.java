@@ -1,148 +1,59 @@
 package com.adp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import java.time.Instant;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
 @Entity
-@Table(name="JOBS")
+@Table(name = "job")
 public class Job {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id")
     private Long userId;
 
     private String department;
 
-    @Column(name="listing_title")
+    @Column(name = "listing_title", length = 100)
     private String listingTitle;
 
-    @Column(name="date_listed",nullable = false, updatable = false)
-    private Instant dateListed;
+    @Column(name = "date_listed")
+    private LocalDateTime dateListed;
 
-    @Column(name="date_closed",nullable = false, updatable = false)
-    private Instant dateClosed;
+    @Column(name = "date_closed")
+    private LocalDateTime dateClosed;
 
-    @Column(name="job_title")
+    @Column(name = "job_title", length = 45)
     private String jobTitle;
 
-    @Column(name="job_description")
+    @Lob
+    @Column(name = "job_description")
     private String jobDescription;
 
-    @Column(name="additional_information")
+    @Lob
+    @Column(name = "additional_information")
     private String additionalInformation;
 
-    @Column(name="listing_status")
     private String listingStatus;
 
-    @Column(name="experience_level")
+    @Column(name = "experience_level", length = 100)
     private String experienceLevel;
 
-    @Column(name="model_resume")
+    @Lob
+    @Column(name = "model_resume")
     private String modelResume;
 
-    @Column(name="model_cover_letter")
+    @Lob
+    @Column(name = "model_cover_letter")
     private String modelCoverLetter;
 
-
-    // Getters and Setters
-
-    public Long getId() {
-        return id;
-    }
-// TODO DO WE NEED TO BE ABLE ABLE TO SET ID AND USER_ID?? 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getListingTitle() {
-        return listingTitle;
-    }
-
-    public void setListingTitle(String listingTitle) {
-        this.listingTitle = listingTitle;
-    }
-
-    public Instant getDateListed() {
-        return dateListed;
-    }
-
-    public Instant getDateClosed() {
-        return dateClosed;
-    }
-
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
-    public String getJobDescription() {
-        return jobDescription;
-    }
-
-    public void setJobDescription(String jobDescription) {
-        this.jobDescription = jobDescription;
-    }
-
-    public String getAdditionalInformation() {
-        return additionalInformation;
-    }
-
-    public void setAdditionalInformation(String additionalInformation) {
-        this.additionalInformation = additionalInformation;
-    }
-
-    public String getListingStatus() {
-        return listingStatus;
-    }
-
-    public void setListingStatus(String listingStatus) {
-        this.listingStatus = listingStatus;
-    }
-
-    public String getExperienceLevel() {
-        return experienceLevel;
-    }
-
-    public void setExperienceLevel(String experienceLevel) {
-        this.experienceLevel = experienceLevel;
-    }
-
-    public String getModelResume() {
-        return modelResume;
-    }
-
-    public void setModelResume(String modelResume) {
-        this.modelResume = modelResume;
-    }
-
-    public String getModelCoverLetter() {
-        return modelCoverLetter;
-    }
-
-    public void setModelCoverLetter(String modelCoverLetter) {
-        this.modelCoverLetter = modelCoverLetter;
-    }
-
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Application> applications; // Establishing one-to-many relationship
 }
