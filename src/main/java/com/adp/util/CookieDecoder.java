@@ -3,13 +3,15 @@ package com.adp.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.boot.web.server.Cookie;
-
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.nimbusds.jose.Algorithm;
-import com.nimbusds.jwt.JWT;
+import com.auth0.jwt.JWT;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
+import jakarta.servlet.http.Cookie;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -18,7 +20,7 @@ public class CookieDecoder {
     private final Algorithm algorithm;
 
     public CookieDecoder(String secret) {
-        this.algorithm = Algorithm.HMAC256(secret);
+        this.algorithm = Algorithm.RSA256;
     }
 
     public Map<String, String> decodeCookie(HttpServletRequest request) throws JWTVerificationException {
