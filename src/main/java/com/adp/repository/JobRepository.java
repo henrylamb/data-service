@@ -1,5 +1,7 @@
 package com.adp.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +15,6 @@ import com.adp.domain.Job;
 public interface JobRepository extends PagingAndSortingRepository<Job, Long>, CrudRepository<Job, Long> {
     void delete(Job job);
 
-    @Query(value = "SELECT * FROM JOB WHERE listing_title = ?1 or job_title = ?1 or listing_status = ?1")
-    Page<Job> findByListingTitleOrJobTitleOrListingStatus(String searchString, Pageable page);
+    Page<Job> findByListingTitleContainingOrJobTitleContaining(String listingTitle, String jobTitle, Pageable page);
+    Page<Job> findByListingTitleContainingIgnoreCaseOrJobTitleContainingIgnoreCase(String listingTitle, String jobTitle, Pageable page);
 }

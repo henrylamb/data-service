@@ -38,7 +38,7 @@ public class JobService{
 
     public Page<Job> getPagesFromSearch(String searchString, int pageNumber, int size){
         Pageable pageable = PageRequest.of(pageNumber, size);
-        return repo.findByListingTitleOrJobTitleOrListingStatus(searchString, pageable);
+        return repo.findByListingTitleContainingIgnoreCaseOrJobTitleContainingIgnoreCase(searchString, searchString, pageable);
     }
 
     public Iterable<Job> getAll(){
