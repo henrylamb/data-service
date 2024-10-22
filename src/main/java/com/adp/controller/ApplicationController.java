@@ -9,11 +9,8 @@ import com.adp.service.ApplicationService;
 import java.util.Optional;
 
 import com.adp.service.JobService;
-import org.objectGeneration.client.Res;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

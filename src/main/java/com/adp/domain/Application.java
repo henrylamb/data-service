@@ -1,9 +1,11 @@
 package com.adp.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
-
+import lombok.Getter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +30,8 @@ public class Application {
 
     private String candidateEmail;
 
-    @ManyToOne
+    @Getter(AccessLevel.NONE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
     private Job job;
 

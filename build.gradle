@@ -7,22 +7,22 @@ plugins {
 group = 'com.adp'
 version = '0.0.1-SNAPSHOT'
 
-// java {
-// 	toolchain {
-// 		languageVersion = JavaLanguageVersion.of(21)
-// 	}
-// }
+ java {
+ 	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+ 	}
+ }
 
 repositories {
     mavenCentral()
-    maven {
+     maven {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/henrylamb/object-generation-java")
-        credentials {
+       credentials {
             username = project.findProperty("gpr.user") as String ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.token") as String ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
+             password = project.findProperty("gpr.token") as String ?: System.getenv("GITHUB_TOKEN")
+         }
+     }
 }
 
 dependencies {
