@@ -2,6 +2,7 @@ package com.adp.controller;
 
 import com.adp.domain.Application;
 import com.adp.domain.Job;
+import com.adp.request.ApplicationGenerator;
 import com.adp.request.ApplicationRequest;
 import com.adp.service.ApplicationService;
 
@@ -25,6 +26,9 @@ public class ApplicationController {
 
     @Autowired
     JobService jobService;
+
+    @Autowired
+    ApplicationGenerator applicationGenerator;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {
@@ -120,12 +124,9 @@ public class ApplicationController {
     }
     
     @PostMapping
-    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
+    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) throws Exception {
         System.out.println(applicationReq);
       Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
-
-
-
 
         Application application = applicationReq.convertToApplication();
 
@@ -141,6 +142,12 @@ public class ApplicationController {
          if (!isApplicationValid(application)) {
             return ResponseEntity.badRequest().build();
          }
+
+         //TODO get generate the information needed for the application
+
+         Application applicationScores = applicationGenerator.sendApplication(application);
+
+         application.setScores(applicationScores);
 
         applicationService.saveApplication(application);
         return ResponseEntity.status(201).body(application);

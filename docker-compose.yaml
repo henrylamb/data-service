@@ -4,6 +4,6 @@ services:
   job-application-service:
     build: .
     ports:
-      - "7001:7001"
+      - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=prod

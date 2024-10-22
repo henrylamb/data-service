@@ -76,4 +76,16 @@ public class Application {
         this.job = null;
         this.review = null;
     }
+
+    public void setScores(Application application){
+        this.averageScore = application.getAverageScore();
+        this.academicAchievementScore = application.getAcademicAchievementScore();
+        this.extenuatingCircumstancesScore = application.getExtenuatingCircumstancesScore();
+        this.matchJobDescriptionScore = application.getMatchJobDescriptionScore();
+        this.pastExperienceScore = application.getPastExperienceScore();
+        this.pedigreeScore = application.getPedigreeScore();
+        this.trajectoryScore = application.getTrajectoryScore();
+        this.yearsOfExperience = application.getYearsOfExperience();
+        this.review = application.getReview();
+    }
 }
