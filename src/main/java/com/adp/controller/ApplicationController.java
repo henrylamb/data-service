@@ -1,17 +1,17 @@
 package com.adp.controller;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+
 import com.adp.domain.Application;
 import com.adp.domain.Job;
 import com.adp.request.ApplicationGenerator;
 import com.adp.request.ApplicationRequest;
 import com.adp.service.ApplicationService;
-
-import java.util.Optional;
-
 import com.adp.service.JobService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
