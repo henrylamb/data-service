@@ -23,7 +23,7 @@ public class JobController {
 
     //url: ../api/job?page=page&items=items
     @GetMapping(value="/page")
-    public ResponseEntity<Page<Job>> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
+    public ResponseEntity<Page<Job>> getPaginatedJobs(@RequestParam(defaultValue="0") int page, @RequestParam (defaultValue = "20") int items){
         return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
     }
 
@@ -38,11 +38,16 @@ public class JobController {
         }
     }
 
-    //TODO url: ../api/job/{id}?filter=filter
-    // @GetMapping(value="/{id}", params={"filter"})
-    // public Page<Job> getFilteredApplications(@RequestParam Optional<String> filter){
-    //     //List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
-    // }
+    //url: ../api/job/search?filter=filter&page=page&items=items
+    @GetMapping(value="/search")
+    public ResponseEntity<?> getSearchResult(@RequestParam String filter, @RequestParam(defaultValue="0") int page, @RequestParam (defaultValue = "20") int items){
+        Page<Job> jobs = jobService.getPagesFromSearch(filter, page, items);
+
+        if(jobs.getTotalElements()>0){
+            return ResponseEntity.ok(jobs);
+        }
+        return ResponseEntity.noContent().build();
+    }
 
     @GetMapping
     public Iterable<Job> getAll() {
@@ -88,12 +93,11 @@ public class JobController {
         return ResponseEntity.notFound().build();
     }
 
-    jobService.transferJobToNewHiringManager(request);
-    
-    Optional<Job> updatedJob = jobService.getJob(request.toUserId); // Fetch the updated job
-    return ResponseEntity.ok(updatedJob); 
+    if(jobService.transferJobToNewHiringManager(optionalJob.get().getUserId() ,request)){
+        return ResponseEntity.ok().build(); 
 
     }
+    return ResponseEntity.badRequest().build();
 
     
     @DeleteMapping("/{id}")

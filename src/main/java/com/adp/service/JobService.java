@@ -36,6 +36,11 @@ public class JobService{
         return repo.findAll(pageable);
     }
 
+    public Page<Job> getPagesFromSearch(String searchString, int pageNumber, int size){
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return repo.findByListingTitleOrJobTitleOrListingStatus(searchString, pageable);
+    }
+
     public Iterable<Job> getAll(){
         return repo.findAll();
     }
@@ -59,20 +64,24 @@ public class JobService{
     }
 
     // TODO do we have 2 validations here??
-    public void transferJobToNewHiringManager(JobTransferRequest request) {
+    public boolean transferJobToNewHiringManager(Long userIdFromFetchedJob, JobTransferRequest request) {
         Optional<Job> jobOptional = getJob(request.fromUserId);  // Assuming getJob returns an Optional<Job>
     
         if (!jobOptional.isPresent()) {  // Check if the job is present
             System.out.println("Job not found for that user");  // Fixed the print statement
-            return;  // Exit the method if the job isn't found
+            return false;  // Exit the method if the job isn't found
         }
     
         // Proceed with transferring the job if it exists
-        Job job = jobOptional.get();
+        Job jobFromUserId = jobOptional.get();
         // Implement logic to transfer the job to the new hiring manager (toUserId)
-
-        job.setUserId((long)request.toUserId);
-        repo.save(job);
+        if(jobFromUserId.getId() == userIdFromFetchedJob){
+            jobFromUserId.setUserId((long)request.toUserId);
+            repo.save(jobFromUserId);
+            return true;
+        }
+        return false;
+        
     }
         
 
