@@ -11,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -28,7 +30,7 @@ public class Application {
 
     @ManyToOne
     @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
-    private Job job; // Establishing relationship to Job
+    private Job job;
 
     @Column(name = "date_applied")
     private LocalDateTime dateApplied;
@@ -68,5 +70,10 @@ public class Application {
     private String review;
 
 
-
+    public void statisticsOnly(){
+        this.customResume = null;
+        this.coverLetter = null;
+        this.job = null;
+        this.review = null;
+    }
 }

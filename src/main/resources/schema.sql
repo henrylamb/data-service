@@ -32,6 +32,8 @@ CREATE TABLE APPLICATION (
     extenuating_circumstances_score INTEGER,
     average_score CLOB,
     review CLOB,
+    custom_resume CLOB,
+    cover_letter CLOB,
     PRIMARY KEY (id),
     FOREIGN KEY (job_id) REFERENCES JOB(id) ON DELETE CASCADE
 );

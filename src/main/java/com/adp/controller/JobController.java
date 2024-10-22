@@ -22,9 +22,9 @@ public class JobController {
     JobService jobService;
 
     //url: ../api/job?page=page&items=items
-    @GetMapping(value="/", params={"page","items"})
-    public Page<Job> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
-        return jobService.getPaginatedJobs(page, items);
+    @GetMapping(value="/page")
+    public ResponseEntity<Page<Job>> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
+        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
     }
 
     //url: ../api/job/{id}/applications
@@ -38,6 +38,12 @@ public class JobController {
         }
     }
 
+    //TODO url: ../api/job/{id}?filter=filter
+    // @GetMapping(value="/{id}", params={"filter"})
+    // public Page<Job> getFilteredApplications(@RequestParam Optional<String> filter){
+    //     //List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
+    // }
+
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
@@ -49,7 +55,6 @@ public class JobController {
     }
 
     // TODO /job/{id}/filter={filter}
-    // TODO GET /job/page?={page}&items?={items}
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
