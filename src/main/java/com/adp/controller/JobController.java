@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.adp.domain.Job;
+import com.adp.domain.JobTransferRequest;
 import com.adp.service.JobService;
 
 @RestController
@@ -21,9 +22,9 @@ public class JobController {
     JobService jobService;
 
     //url: ../api/job?page=page&items=items
-    @GetMapping(value="/", params={"page","items"})
-    public Page<Job> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
-        return jobService.getPaginatedJobs(page, items);
+    @GetMapping(value="/page")
+    public ResponseEntity<Page<Job>> getPaginatedJobs(@RequestParam int page, @RequestParam (defaultValue = "20") int items){
+        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
     }
 
     //url: ../api/job/{id}/applications
@@ -37,6 +38,12 @@ public class JobController {
         }
     }
 
+    //TODO url: ../api/job/{id}?filter=filter
+    // @GetMapping(value="/{id}", params={"filter"})
+    // public Page<Job> getFilteredApplications(@RequestParam Optional<String> filter){
+    //     //List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
+    // }
+
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
@@ -48,7 +55,6 @@ public class JobController {
     }
 
     // TODO /job/{id}/filter={filter}
-    // TODO GET /job/page?={page}&items?={items}
 
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
@@ -70,9 +76,26 @@ public class JobController {
         return ResponseEntity.badRequest().build();
       }
       jobService.saveJob(job);
-      return ResponseEntity.ok(job);
+      return ResponseEntity.ok(job); // This returns the job in the response body
     }
 
+    @PutMapping("/transfer")
+    public ResponseEntity<?> transferJobToNewHiringManager(@RequestBody JobTransferRequest request) {
+
+    Optional<Job> optionalJob = jobService.getJob(request.getJobId());  
+
+    if (optionalJob.isEmpty()) {  
+        return ResponseEntity.notFound().build();
+    }
+
+    jobService.transferJobToNewHiringManager(request);
+    
+    Optional<Job> updatedJob = jobService.getJob(request.toUserId); // Fetch the updated job
+    return ResponseEntity.ok(updatedJob); 
+
+    }
+
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);
