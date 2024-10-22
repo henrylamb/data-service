@@ -3,14 +3,13 @@ package com.adp.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.boot.web.server.Cookie;
-
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.JWTVerifier;
-import com.nimbusds.jose.Algorithm;
-import com.nimbusds.jwt.JWT;
+import com.auth0.jwt.JWT;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class CookieDecoder {
