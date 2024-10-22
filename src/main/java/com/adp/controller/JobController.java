@@ -82,19 +82,20 @@ public class JobController {
     @PutMapping("/transfer")
     public ResponseEntity<?> transferJobToNewHiringManager(@RequestBody JobTransferRequest request) {
 
-    Optional<Job> optionalJob = jobService.getJob(request.getJobId());  
+        boolean success = jobService.transferJobToNewHiringManager(request); // Was the operation to update successful?
 
-    if (optionalJob.isEmpty()) {  
-        return ResponseEntity.notFound().build();
+        if (!success) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<Job> updatedJob = jobService.getJob(request.getJobId());
+
+        if (updatedJob.isEmpty()) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        return ResponseEntity.ok(updatedJob.get()); // return the updated job with new hiring manager in the response body 
     }
-
-    jobService.transferJobToNewHiringManager(request);
-    
-    Optional<Job> updatedJob = jobService.getJob(request.toUserId); // Fetch the updated job
-    return ResponseEntity.ok(updatedJob); 
-
-    }
-
     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
