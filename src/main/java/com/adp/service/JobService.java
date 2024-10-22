@@ -62,21 +62,20 @@ public class JobService{
         repo.delete(job);
     }
 
-    // TODO do we have 2 validations here??
-    public void transferJobToNewHiringManager(JobTransferRequest request) {
-        Optional<Job> jobOptional = getJob(request.fromUserId);  // Assuming getJob returns an Optional<Job>
-    
-        if (!jobOptional.isPresent()) {  // Check if the job is present
-            System.out.println("Job not found for that user");  // Fixed the print statement
-            return;  // Exit the method if the job isn't found
-        }
-    
-        // Proceed with transferring the job if it exists
-        Job job = jobOptional.get();
-        // Implement logic to transfer the job to the new hiring manager (toUserId)
+  
+    public boolean transferJobToNewHiringManager(JobTransferRequest request) {
 
-        job.setUserId((long)request.toUserId);
-        repo.save(job);
+        Optional<Job> optionalJob = getJob(request.getJobId()); // Get teh job we want to change
+
+        if (optionalJob.isEmpty()) { // If the job does not exist, return false
+            return false;
+        }
+
+        Job job = optionalJob.get(); // Get it (if it does exist) 
+
+        job.setUserId(request.toUserId); // Re-assign userId
+        saveJob(job); // save job to database
+        return true; // return true 
     }
         
 

@@ -3,7 +3,7 @@ import lombok.Data;
 
 @Data
 public class JobTransferRequest {
-    public Long jobId;
-    public Long fromUserId;
-    public Long toUserId;
+    public long jobId;
+    public long fromUserId;
+    public long toUserId;
 }
