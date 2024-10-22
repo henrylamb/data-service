@@ -36,7 +36,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.objectGeneration:generation-on-rails-java:1.2'
+	//implementation 'org.objectGeneration:generation-on-rails-java:1.2'
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 }
