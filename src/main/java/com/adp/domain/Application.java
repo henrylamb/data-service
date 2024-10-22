@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -29,7 +31,7 @@ public class Application {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
-    private Job job; 
+    private Job job;
 
     @Column(name = "date_applied")
     private LocalDateTime dateApplied;
