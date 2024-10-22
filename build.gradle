@@ -15,14 +15,14 @@ version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/henrylamb/object-generation-java")
-        credentials {
-            username = project.findProperty("gpr.user") as String ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.token") as String ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
+    // maven {
+    //     name = "GitHubPackages"
+    //     url = uri("https://maven.pkg.github.com/henrylamb/object-generation-java")
+    //     credentials {
+    //         username = project.findProperty("gpr.user") as String ?: System.getenv("GITHUB_ACTOR")
+    //         password = project.findProperty("gpr.token") as String ?: System.getenv("GITHUB_TOKEN")
+    //     }
+    // }
 }
 
 dependencies {
@@ -35,9 +35,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.springframework.security:spring-security-test'
 	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	// implementation 'org.objectGeneration:generation-on-rails-java:1.2'
-	implementation 'com.auth0:java-jwt:4.4.0'
+  annotationProcessor 'org.projectlombok:lombok'
+    // implementation 'org.objectGeneration:generation-on-rails-java:1.2'
 }
 
 tasks.named('test') {
