@@ -1,9 +1,70 @@
-version: '3.8'
-
 services:
   job-application-service:
     build: .
     ports:
-      - "8081:8081"
+      - "8000:8000"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      SPRING_APPLICATION_NAME: data-service
+      SERVER_SERVLET_CONTEXT_PATH: /api
+      SERVER_PORT: 8000
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
+      RSA_PUBLIC_KEY: classpath:keys/public.pem
+      MULTIPLE_PASSWORD: your_password_here
+      BASE_URL: http://object-gen:2008
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/your_database_name?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: your_username
+      SPRING_DATASOURCE_PASSWORD: your_password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_GENERATE_DDL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  database:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: your_database_name
+      MYSQL_USER: your_username
+      MYSQL_PASSWORD: your_password
+      MYSQL_ROOT_PASSWORD: your_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data1:/var/lib/mysql
+    networks:
+      - app-network
+
+  object-gen:
+    image: henrylamb/generation-on-rails:latest
+    ports:
+      - "2008:2008"
+    environment:
+      MULTIPLE_TOKEN: ${MULTIPLE_TOKEN}
+      MULTIPLE_PASSWORD: ${MULTIPLE_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      CLAUDE_API_KEY: ${CLAUDE_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+      OPENAI_TIER: ${OPENAI_TIER}
+      GROQ_CLOUD_TIER: ${GROQ_CLOUD_TIER}
+      ANTHROPIC_TIER: ${ANTHROPIC_TIER}
+      GOOGLE_TIER: ${GOOGLE_TIER}
+
+      ENVIRONMENT: ${ENVIRONMENT}
+      GRPC_UNSECURE: ${GRPC_UNSECURE}
+      CERT_FILE: ${CERT_FILE}
+      KEY_FILE: ${KEY_FILE}
+    networks:
+      - app-network
+
+volumes:
+  mysql_data1:
+
+networks:
+  app-network:
+    driver: bridge

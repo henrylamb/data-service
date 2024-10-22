@@ -136,6 +136,7 @@ public class ApplicationController {
         } else {
             // Handle the case where the job is not found
             // For example, you might want to throw an exception or return an error response
+            System.out.println("Job not found");
             return ResponseEntity.badRequest().build();
         }
 

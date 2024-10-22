@@ -9,13 +9,14 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "job")
+@Table(name = "JOB")
 public class Job {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id")
     private Long userId;
 
     private String department;
@@ -23,7 +24,7 @@ public class Job {
     @Column(name = "listing_title", length = 100)
     private String listingTitle;
 
-    @Column(name = "date_listed")
+    @Column(name = "date_listed", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime dateListed;
 
     @Column(name = "date_closed")
@@ -33,11 +34,11 @@ public class Job {
     private String jobTitle;
 
     @Lob
-    @Column(name = "job_description")
+    @Column(name = "job_description", columnDefinition = "LONGTEXT")
     private String jobDescription;
 
     @Lob
-    @Column(name = "additional_information")
+    @Column(name = "additional_information", columnDefinition = "LONGTEXT")
     private String additionalInformation;
 
     private String listingStatus;
@@ -46,14 +47,20 @@ public class Job {
     private String experienceLevel;
 
     @Lob
-    @Column(name = "model_resume")
+    @Column(name = "model_resume", columnDefinition = "LONGTEXT")
     private String modelResume;
 
     @Lob
-    @Column(name = "model_cover_letter")
+    @Column(name = "model_cover_letter", columnDefinition = "LONGTEXT")
     private String modelCoverLetter;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Application> applications; // Establishing one-to-many relationship
+
+    public Job(int i, String engineering, String softwareEngineer, Object o, String softwareEngineer1, String s, String s1, String open, String senior, String s2, String s3) {
+    }
+
+    public Job() {
+    }
 }
