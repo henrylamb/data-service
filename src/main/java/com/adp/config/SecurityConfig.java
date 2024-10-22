@@ -2,9 +2,11 @@ package com.adp.config;
 
 import java.security.interfaces.RSAPublicKey;
 
+import org.hibernate.annotations.Filter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,11 +26,11 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/").permitAll()
+            .requestMatchers(HttpMethod.GET, "/", "/job/page", "/job/**").permitAll()
             .anyRequest().authenticated())
 
-        .oauth2ResourceServer((oauth2ResourceServer) -> 
-            oauth2ResourceServer.jwt((customizer) -> 
+        .oauth2ResourceServer((oauth2ResourceServer) ->
+            oauth2ResourceServer.jwt((customizer) ->
                 customizer.decoder(JWTHelper.jwtDecoder(publicKey))))
         .build();
   }

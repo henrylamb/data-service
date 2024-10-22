@@ -76,5 +76,4 @@ public class Application {
         this.job = null;
         this.review = null;
     }
-
 }
