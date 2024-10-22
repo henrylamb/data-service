@@ -245,11 +245,11 @@ public class JobControllerTest {
     @Test
 public void testTransferJobToHiringManager() throws Exception {
     // Arrange
-    Job job1 = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+    Job job1 = createJob(1L, "Engineering", "Frontend Developer", "React Developer",
             "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
             "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
             "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
-    Job updatedJob = createMockJob(1L, "Engineering", "Frontend Developer", "React Developer",
+    Job updatedJob = createJob(1L, "Engineering", "Frontend Developer", "React Developer",
             "Design and develop responsive user interfaces using React, JavaScript, and CSS.",
             "Work with the UX/UI team to create seamless user experiences.", "Open", "Mid-level",
             "Sample Resume for Frontend Developer", "Sample Cover Letter for Frontend Developer");
@@ -257,7 +257,8 @@ public void testTransferJobToHiringManager() throws Exception {
 
     JobTransferRequest transferRequest = new JobTransferRequest();
     transferRequest.setJobId(1L);
-    transferRequest.setNewUserId(2L);
+    transferRequest.setFromUserId(2L);
+    transferRequest.setToUserId(4L);
 
     when(jobService.getJob(1L)).thenReturn(Optional.of(job1));
     doNothing().when(jobService).transferJobToNewHiringManager(any(JobTransferRequest.class));
