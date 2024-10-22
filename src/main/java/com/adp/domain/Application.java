@@ -71,5 +71,10 @@ public class Application {
     private String review;
 
 
-
+    public void statisticsOnly(){
+        this.customResume = null;
+        this.coverLetter = null;
+        this.job = null;
+        this.review = null;
+    }
 }

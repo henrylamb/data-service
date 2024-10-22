@@ -18,14 +18,14 @@ import com.adp.domain.JobTransferRequest;
 import com.adp.repository.JobRepository;
 
 @Service
-public class JobService{
+public class JobService {
     @Autowired
     JobRepository repo;
 
-    public List<Application> getApplicationsOfGivenJobId(Long jobId){
+    public List<Application> getApplicationsOfGivenJobId(Long jobId) {
         Optional<Job> job = repo.findById(jobId);
-        List<Application> returnList =  new ArrayList<>();
-        if(job.isPresent()){
+        List<Application> returnList = new ArrayList<>();
+        if (job.isPresent()) {
             returnList = job.get().getApplications();
         }
         return returnList;
@@ -36,12 +36,13 @@ public class JobService{
         return repo.findAll(pageable);
     }
 
-    public Page<Job> getPagesFromSearch(String searchString, int pageNumber, int size){
+    public Page<Job> getPagesFromSearch(String searchString, int pageNumber, int size) {
         Pageable pageable = PageRequest.of(pageNumber, size);
-        return repo.findByListingTitleContainingIgnoreCaseOrJobTitleContainingIgnoreCase(searchString, searchString, pageable);
+        return repo.findByListingTitleContainingIgnoreCaseOrJobTitleContainingIgnoreCase(searchString, searchString,
+                pageable);
     }
 
-    public Iterable<Job> getAll(){
+    public Iterable<Job> getAll() {
         return repo.findAll();
     }
 
@@ -59,31 +60,23 @@ public class JobService{
                 .toUri();
     }
 
-    public void delete(Job job){
+    public void delete(Job job) {
         repo.delete(job);
     }
 
-    // TODO do we have 2 validations here??
-    public boolean transferJobToNewHiringManager(Long userIdFromFetchedJob, JobTransferRequest request) {
-        Optional<Job> jobOptional = getJob(request.fromUserId);  // Assuming getJob returns an Optional<Job>
-    
-        if (!jobOptional.isPresent()) {  // Check if the job is present
-            System.out.println("Job not found for that user");  // Fixed the print statement
-            return false;  // Exit the method if the job isn't found
-        }
-    
-        // Proceed with transferring the job if it exists
-        Job jobFromUserId = jobOptional.get();
-        // Implement logic to transfer the job to the new hiring manager (toUserId)
-        if(jobFromUserId.getId() == userIdFromFetchedJob){
-            jobFromUserId.setUserId((long)request.toUserId);
-            repo.save(jobFromUserId);
-            return true;
-        }
-        return false;
-        
-    }
-        
+    public boolean transferJobToNewHiringManager(JobTransferRequest request) {
 
+        Optional<Job> optionalJob = getJob(request.getJobId()); // Get teh job we want to change
+
+        if (optionalJob.isEmpty()) { // If the job does not exist, return false
+            return false;
+        }
+
+        Job job = optionalJob.get(); // Get it (if it does exist)
+
+        job.setUserId(request.toUserId); // Re-assign userId
+        saveJob(job); // save job to database
+        return true; // return true
     }
 
+}
