@@ -8,6 +8,7 @@ import com.adp.domain.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.adp.domain.Job;
@@ -22,6 +23,7 @@ public class JobController {
     JobService jobService;
 
     // url: ../api/job?page=page&items=items
+    @PreAuthorize("hasAnyRole('CANDIDATE','MANAGER','ADMIN')")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<Job>> getPaginatedJobs(
             @RequestParam(name = "page", defaultValue = "0") int page,
