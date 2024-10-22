@@ -17,7 +17,6 @@ import com.adp.util.JWTHelper;
 import static com.adp.util.JWTHelper.jwtDecoder;
 
 @Configuration
-@EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -31,14 +30,8 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-//            .requestMatchers(HttpMethod.GET, "/", "/job/page", "/job/**").permitAll()
-//            .requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN")
-//            .requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN")
-//            .requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated())
-        //.addFilterBefore(new JwtAuthorizationFilter(jwtDecoder), AbstractPreAuthenticatedProcessingFilter.class) // We get the claims from the token
-            .oauth2ResourceServer(oauth2 -> oauth2
-                    .jwt(jwt -> jwt
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
                             .decoder(JWTHelper.jwtDecoder(publicKey)) // Use NimbusJwtDecoder with public key
                             .jwtAuthenticationConverter(JWTHelper.jwtAuthenticationConverter()))) // Extract roles
 
