@@ -37,9 +37,9 @@ public class JwtAuthorizationFilter extends AbstractPreAuthenticatedProcessingFi
         return null;
     }
 
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        SecurityContextHolder.getContext().setAuthentication(authResult);
-        chain.doFilter(request, response);
-    }
+    // @Override
+    // protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    //     SecurityContextHolder.getContext().setAuthentication(authResult);
+    //     chain.doFilter(request, response);
+    // }
 }
