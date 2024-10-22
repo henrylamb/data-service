@@ -30,7 +30,7 @@ CREATE TABLE APPLICATION (
     pedigree_score INTEGER,
     trajectory_score INTEGER,
     extenuating_circumstances_score INTEGER,
-    average_score CLOB,
+    average_score INTEGER,
     review CLOB,
     custom_resume CLOB,
     cover_letter CLOB,

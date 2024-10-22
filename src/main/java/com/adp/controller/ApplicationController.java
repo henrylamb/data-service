@@ -144,7 +144,6 @@ public class ApplicationController {
          }
 
          //TODO get generate the information needed for the application
-
          Application applicationScores = applicationGenerator.sendApplication(application);
 
          application.setScores(applicationScores);

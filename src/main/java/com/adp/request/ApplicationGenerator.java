@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +37,6 @@ public class ApplicationGenerator {
         // Fetch the properties from application.properties using the environment object
         password = environment.getProperty("multiple.password");
         baseUrl = environment.getProperty("base.url");
-
-        System.out.println("Password: " + password);
-        System.out.println("Base URL: " + baseUrl);
 
         this.client = Client.newDefaultClient(password, baseUrl);
     }

@@ -63,7 +63,7 @@ public class Application {
 
     @Lob
     @Column(name = "average_score")
-    private String averageScore;
+    private Integer averageScore;
 
     @Lob
     @Column(name = "review")
