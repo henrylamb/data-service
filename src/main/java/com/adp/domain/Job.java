@@ -54,6 +54,6 @@ public class Job {
     private String modelCoverLetter;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    // @JsonIgnore
+    @JsonIgnore
     private List<Application> applications; // Establishing one-to-many relationship
 }

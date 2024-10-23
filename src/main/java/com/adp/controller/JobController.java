@@ -15,6 +15,8 @@ import com.adp.domain.Job;
 import com.adp.domain.JobTransferRequest;
 import com.adp.service.JobService;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/job")
 public class JobController {
@@ -23,7 +25,7 @@ public class JobController {
     JobService jobService;
 
     // url: ../api/job?page=page&items=items
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    // @PreAuthorize("permitAll()")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<Job>> getPaginatedJobs(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -45,12 +47,12 @@ public class JobController {
 
     //TODO - not wokring
     // url: ../api/job/search?value=value&page=page&items=items all users
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @GetMapping(value = "/search")
     public ResponseEntity<?> getSearchResult(
             @RequestParam(name = "value") String value,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int items) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "items", defaultValue = "20") int items) {
 
         Page<Job> jobs = jobService.getPagesFromSearch(value, page, items);
 
@@ -60,13 +62,13 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    // @PreAuthorize("permitAll()")
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public Optional<Job> getJob(@PathVariable("id") long id) {
         return jobService.getJob(id);
@@ -94,6 +96,7 @@ public class JobController {
         if (optionalJob.isEmpty() || job.getId() != id || !isJobValid(job)) {
             return ResponseEntity.badRequest().build();
         }
+        job.setApplications(optionalJob.get().getApplications());
         jobService.saveJob(job);
         return ResponseEntity.ok(job); // This returns the job in the response body
     }
