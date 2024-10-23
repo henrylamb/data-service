@@ -44,6 +44,7 @@ public class JobController {
     }
 
     // url: ../api/job/search?value=value&page=page&items=items all users
+    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
     @GetMapping(value = "/search")
     public ResponseEntity<?> getSearchResult(
             @RequestParam(name = "value") String value,
@@ -58,16 +59,19 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')") //TODO - why sometime ROLE_MANAGER and sometimes not
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
     }
-    @PreAuthorize("hasRole('CANDIDATE')")
+
+    @PreAuthorize("hasRole('CANDIDATE')") //TODO hasAnyRole? -> in endpoins document it is for all
     @GetMapping("/{id}")
     public Optional<Job> getJob(@PathVariable("id") long id) {
         return jobService.getJob(id);
     }
 
+    @PreAuthorize("hasRole('MANAGERS')")
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
         if (!isJobValid(newJob)) {
@@ -79,6 +83,7 @@ public class JobController {
         return ResponseEntity.created(location).body(newJob);
     }
 
+    @PreAuthorize("hasRole('MANAGERS')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@PathVariable("id") long id, @RequestBody Job job) {
 
@@ -91,6 +96,7 @@ public class JobController {
         return ResponseEntity.ok(job); // This returns the job in the response body
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/transfer")
     public ResponseEntity<?> transferJobToNewHiringManager(@RequestBody JobTransferRequest request) {
 
@@ -109,6 +115,7 @@ public class JobController {
         return ResponseEntity.ok(updatedJob.get()); // return the updated job with new hiring manager in the response body 
     }
     
+    @PreAuthorize("hasRole('MANAGERS')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);
