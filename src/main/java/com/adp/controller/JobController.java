@@ -92,6 +92,7 @@ public class JobController {
         if (optionalJob.isEmpty() || job.getId() != id || !isJobValid(job)) {
             return ResponseEntity.badRequest().build();
         }
+        job.setApplications(optionalJob.get().getApplications());
         jobService.saveJob(job);
         return ResponseEntity.ok(job); // This returns the job in the response body
     }
