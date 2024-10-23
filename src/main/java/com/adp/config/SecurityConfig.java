@@ -40,7 +40,6 @@ public class SecurityConfig {
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
             .decoder(JWTHelper.jwtDecoder(publicKey)) // Use NimbusJwtDecoder with public key
             .jwtAuthenticationConverter(JWTHelper.jwtAuthenticationConverter()))) // Extract roles
-
         .build();
   }
   // we can use the userId from the jwt like this by calling it in a REST method

@@ -34,7 +34,7 @@ public class JobController {
     }
 
     // url: ../api/job/{id}/applications
-    @PreAuthorize("hasRole('hiring-manager')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @GetMapping("/{id}/applications")
     public ResponseEntity<?> getApplications(@PathVariable(value = "id") Long id) {
         List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
@@ -85,7 +85,7 @@ public class JobController {
         return ResponseEntity.created(location).body(newJob);
     }
 
-    @PreAuthorize("hasRole('hiring-manager')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@PathVariable("id") long id, @RequestBody Job job) {
 
@@ -100,7 +100,7 @@ public class JobController {
     }
   
 
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/transfer")
     public ResponseEntity<?> transferJobToNewHiringManager(@RequestBody JobTransferRequest request) {
 
@@ -119,7 +119,7 @@ public class JobController {
         return ResponseEntity.ok(updatedJob.get()); // return the updated job with new hiring manager in the response body 
     }
     
-    @PreAuthorize("hasRole('hiring-manager')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         Optional<Job> job = jobService.getJob(id);

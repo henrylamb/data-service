@@ -24,7 +24,7 @@ public class ApplicationController {
     @Autowired
     JobService jobService;
 
-    @PreAuthorize("hasRole('applicant')")
+    @PreAuthorize("hasRole('ROLE_APPLICANT')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {
         Optional<Application> optApplication = applicationService.getApplication(id);
@@ -34,7 +34,7 @@ public class ApplicationController {
         return ResponseEntity.ok(optApplication.get());
     }
 
-    @PreAuthorize("hasRole('hiring-manager')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @GetMapping("/{id}/statistics")
     public ResponseEntity<Application> getApplicationStatistics(@PathVariable("id") long id) {
         Optional<Application> optApplication = applicationService.getApplication(id);
@@ -49,7 +49,7 @@ public class ApplicationController {
         return ResponseEntity.ok(application);
     }
 
-    @PreAuthorize("hasRole('hiring-manager')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication(@PathVariable("id") long id) {
         // delete application
@@ -58,7 +58,7 @@ public class ApplicationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('applicant')")
+    @PreAuthorize("hasRole('ROLE_APPLICANT')")
     @PutMapping("/{id}")
     public ResponseEntity<Application> putApplication(@PathVariable("id") long id, @RequestBody ApplicationRequest applicationReq) {
         System.out.println(applicationReq);
@@ -84,7 +84,7 @@ public class ApplicationController {
         return ResponseEntity.ok(application);
     }
 
-    @PreAuthorize("hasRole('hiring-manager')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @PutMapping("/manager/{id}")
     public ResponseEntity<Application> putApplicationManager(@PathVariable("id") long id, @RequestBody ApplicationRequest applicationReq) {
         Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
@@ -115,7 +115,7 @@ public class ApplicationController {
         return ResponseEntity.ok(application);
     }
 
-    @PreAuthorize("hasAnyRole('applicant','hiring-manager','admin')") //TODO  what's going on
+    @PreAuthorize("hasAnyRole('ROLE_APPLICANT','ROLE_HIRING-MANAGER','ROLE_ADMIN')") //TODO  what's going on
     @GetMapping("/page")
     public ResponseEntity<Page<Application>> getApplications(@RequestParam("page") int page, @RequestParam("items") int items) {
 
@@ -123,7 +123,7 @@ public class ApplicationController {
         return ResponseEntity.ok(applications);
     }
     
-    @PreAuthorize("hasRole('applicant')")
+    @PreAuthorize("hasRole('ROLE_APPLICANT')")
     @PostMapping
     public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
         System.out.println(applicationReq);

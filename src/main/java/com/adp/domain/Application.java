@@ -71,6 +71,9 @@ public class Application {
     @Column(name = "review")
     private String review;
 
+    public Job getJob() {
+        return job;
+    }
 
     public void statisticsOnly(){
         this.customResume = null;
