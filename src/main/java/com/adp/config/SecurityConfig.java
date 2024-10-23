@@ -12,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.adp.util.JWTHelper;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static com.adp.util.JWTHelper.jwtDecoder;
 
@@ -27,7 +29,8 @@ public class SecurityConfig {
 
     return http
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .csrf(csrf -> csrf.disable()).cors(cors->cors.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
           .requestMatchers("/job/page").permitAll()
           .requestMatchers("/job/{id}").permitAll()
@@ -47,5 +50,15 @@ public class SecurityConfig {
   //
   // // Extract the userId from the principal
   // String userId = (String) authentication.getPrincipal();
+  @Bean
+  public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      configuration.addAllowedOrigin("*"); // Allow all origins
+      configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
+      configuration.addAllowedHeader("*"); // Allow all headers
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration);
+      return source;
+  }
 
 }
