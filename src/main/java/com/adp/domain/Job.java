@@ -54,7 +54,7 @@ public class Job {
     @Column(name = "model_cover_letter", columnDefinition = "LONGTEXT")
     private String modelCoverLetter;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Application> applications; // Establishing one-to-many relationship
 
