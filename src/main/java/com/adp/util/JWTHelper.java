@@ -24,13 +24,17 @@ public class JWTHelper {
   }
 
   public static JwtAuthenticationConverter jwtAuthenticationConverter() {
+    
       JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
       converter.setJwtGrantedAuthoritiesConverter((jwt) -> {
           // Extract role claim from JWT and map to Spring Security authority
           String role = jwt.getClaimAsString("role");
+          System.out.println("In Authenticator: " + role);
           return Collections.singletonList(new SimpleGrantedAuthority(role.toUpperCase()));
+          
       });
       converter.setPrincipalClaimName("userId");
+      System.out.println("In Authenticator v2: " + converter);
       return converter;
 
   }
