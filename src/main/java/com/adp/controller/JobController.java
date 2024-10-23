@@ -15,6 +15,8 @@ import com.adp.domain.Job;
 import com.adp.domain.JobTransferRequest;
 import com.adp.service.JobService;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/job")
 public class JobController {
@@ -23,7 +25,7 @@ public class JobController {
     JobService jobService;
 
     // url: ../api/job?page=page&items=items
-    @PreAuthorize("permitAll()")
+    // @PreAuthorize("permitAll()")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<Job>> getPaginatedJobs(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -59,7 +61,7 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("permitAll()")
+    // @PreAuthorize("permitAll()")
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
