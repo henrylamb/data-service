@@ -23,7 +23,7 @@ public class JobController {
     JobService jobService;
 
     // url: ../api/job?page=page&items=items
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<Job>> getPaginatedJobs(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -44,7 +44,7 @@ public class JobController {
     }
 
     // url: ../api/job/search?value=value&page=page&items=items all users
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @GetMapping(value = "/search")
     public ResponseEntity<?> getSearchResult(
             @RequestParam(name = "value") String value,
@@ -59,13 +59,13 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public Optional<Job> getJob(@PathVariable("id") long id) {
         return jobService.getJob(id);
