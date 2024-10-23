@@ -4,19 +4,13 @@ FROM gradle:jdk21-alpine AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy only the Gradle build files (to cache dependencies)
-COPY build.gradle settings.gradle /app/
-
-# Download dependencies before copying the rest of the source code
-RUN gradle --no-daemon build || return 0
-
-# Copy the rest of the source code
+# Copy the Gradle build files and the source code
 COPY . .
 
-# Build the Spring Boot project (creates an executable JAR)
-RUN gradle bootJar --no-daemon
+# Clean and build the Spring Boot project
+RUN gradle clean bootJar --no-daemon
 
-# Stage 2: Use jlink to create a custom Java runtime and minimize image size
+# Stage 2: Use a minimal Java runtime
 FROM eclipse-temurin:21-jre-alpine AS runtime
 
 # Set the working directory
@@ -25,7 +19,7 @@ WORKDIR /app
 # Copy the Spring Boot JAR file from the build stage
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# Expose port 8080
+# Expose port 8080 (default for Spring Boot)
 EXPOSE 8000
 
 # Run the Spring Boot application
