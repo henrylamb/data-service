@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     return http
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .csrf(csrf -> csrf.disable())
+        .csrf(csrf -> csrf.disable()).cors(cors->cors.disable())
         .authorizeHttpRequests(auth -> auth
           .requestMatchers("/job/page").permitAll()
           .requestMatchers("/job/{id}").permitAll()
