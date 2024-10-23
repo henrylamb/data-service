@@ -95,6 +95,7 @@ public class JobController {
         jobService.saveJob(job);
         return ResponseEntity.ok(job); // This returns the job in the response body
     }
+  
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/transfer")
