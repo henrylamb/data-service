@@ -94,4 +94,8 @@ public class Application {
         this.yearsOfExperience = application.getYearsOfExperience();
         this.review = application.getReview();
     }
+
+    public Job getJob() {
+        return this.job;
+    }
 }
