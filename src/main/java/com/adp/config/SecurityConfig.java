@@ -32,6 +32,7 @@ public class SecurityConfig {
           .requestMatchers("/job/page").permitAll()
           .requestMatchers("/job/{id}").permitAll()
           .requestMatchers("/job").permitAll()
+          .requestMatchers("/").permitAll()
             .anyRequest().authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
             .decoder(JWTHelper.jwtDecoder(publicKey)) // Use NimbusJwtDecoder with public key
