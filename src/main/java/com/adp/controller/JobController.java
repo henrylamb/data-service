@@ -48,8 +48,8 @@ public class JobController {
     @GetMapping(value = "/search")
     public ResponseEntity<?> getSearchResult(
             @RequestParam(name = "value") String value,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int items) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "items", defaultValue = "20") int items) {
 
         Page<Job> jobs = jobService.getPagesFromSearch(value, page, items);
 
@@ -95,6 +95,7 @@ public class JobController {
         jobService.saveJob(job);
         return ResponseEntity.ok(job); // This returns the job in the response body
     }
+  
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/transfer")

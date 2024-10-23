@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 import com.adp.util.JWTHelper;
 
 import static com.adp.util.JWTHelper.jwtDecoder;
@@ -31,16 +30,18 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .anyRequest().authenticated())
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
-                            .decoder(JWTHelper.jwtDecoder(publicKey)) // Use NimbusJwtDecoder with public key
-                            .jwtAuthenticationConverter(JWTHelper.jwtAuthenticationConverter()))) // Extract roles
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
+            .decoder(JWTHelper.jwtDecoder(publicKey)) // Use NimbusJwtDecoder with public key
+            .jwtAuthenticationConverter(JWTHelper.jwtAuthenticationConverter()))) // Extract roles
 
-            .build();
+        .build();
   }
-  //we can use the userId from the jwt like this by calling it in a REST method in the controller
-  //  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  // we can use the userId from the jwt like this by calling it in a REST method
+  // in the controller
+  // Authentication authentication =
+  // SecurityContextHolder.getContext().getAuthentication();
   //
-  //        // Extract the userId from the principal
-  //        String userId = (String) authentication.getPrincipal();
+  // // Extract the userId from the principal
+  // String userId = (String) authentication.getPrincipal();
 
 }
