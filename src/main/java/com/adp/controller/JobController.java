@@ -43,6 +43,7 @@ public class JobController {
         }
     }
 
+    //TODO - not wokring
     // url: ../api/job/search?value=value&page=page&items=items all users
     @PreAuthorize("hasAnyRole('ROLE_CANDIDATE','ROLE_MANAGER','ROLE_ADMIN')")
     @GetMapping(value = "/search")
@@ -83,6 +84,7 @@ public class JobController {
         return ResponseEntity.created(location).body(newJob);
     }
 
+    //TODO - not working
     @PreAuthorize("hasRole('MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@PathVariable("id") long id, @RequestBody Job job) {
