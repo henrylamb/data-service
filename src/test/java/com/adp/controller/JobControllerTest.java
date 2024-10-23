@@ -187,6 +187,7 @@ public class JobControllerTest {
     }
 
     @Test
+    // @Disabled
     public void testAddJob() throws Exception {
         URI location = new URI("/job/1");
         when(jobService.saveJob(any(Job.class))).thenReturn(location);
