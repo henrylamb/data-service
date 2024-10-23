@@ -35,7 +35,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: henrylamb/data-capstone:1.0.0, henrylamb/data-capstone:latest
+          images: henrylamb/dataCapstone
 
       # Step 6: Build and push the Docker image with SBOM and provenance
       - name: Build and push Docker image with SBOM and provenance
