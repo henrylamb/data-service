@@ -1,5 +1,6 @@
 package com.adp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class Application {
     @Getter(AccessLevel.NONE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Job job;
 
     @Column(name = "date_applied")

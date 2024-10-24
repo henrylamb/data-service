@@ -24,7 +24,7 @@ public class ApplicationController {
     @Autowired
     JobService jobService;
 
-    @PreAuthorize("hasRole('ROLE_APPLICANT')")
+    @PreAuthorize("hasAnyRole('ROLE_APPLICANT','ROLE_HIRING-MANAGER','ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {
         Optional<Application> optApplication = applicationService.getApplication(id);
