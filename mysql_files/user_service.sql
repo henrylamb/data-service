@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `user_service`;
-USE `user_service`;
+CREATE DATABASE  IF NOT EXISTS `your_database_name`;
+USE `your_database_name`;
 DROP TABLE IF EXISTS `USERS`;
 
 CREATE TABLE `USERS` (

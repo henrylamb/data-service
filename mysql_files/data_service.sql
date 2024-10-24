@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `data_service`;
-USE `data_service`;
+CREATE DATABASE  IF NOT EXISTS `your_database_name`;
+USE `your_database_name`;
 
 DROP TABLE IF EXISTS `JOB`;
 
