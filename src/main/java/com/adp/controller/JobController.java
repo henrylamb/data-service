@@ -61,7 +61,7 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
 
-    // @PreAuthorize("permitAll()")
+    @PreAuthorize("permitAll()")
     @GetMapping
     public Iterable<Job> getAll() {
         return jobService.getAll();
