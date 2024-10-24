@@ -19,6 +19,10 @@ public class ApplicationService {
     @Autowired
     private ApplicationRepository repo;
 
+    public Iterable<Application> all() {
+        return repo.findAll();
+    }
+
     public Optional<Application> getApplication(long id) {
         return repo.findById(id);
     }
