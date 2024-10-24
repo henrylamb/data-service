@@ -1,11 +1,5 @@
 package com.adp.controller;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-
 import com.adp.domain.Application;
 import com.adp.domain.Job;
 import com.adp.request.ApplicationGenerator;
@@ -44,7 +38,7 @@ public class ApplicationController {
         return ResponseEntity.ok(optApplication.get());
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @GetMapping("/{id}/statistics")
     public ResponseEntity<Application> getApplicationStatistics(@PathVariable("id") long id) {
         Optional<Application> optApplication = applicationService.getApplication(id);
@@ -59,7 +53,7 @@ public class ApplicationController {
         return ResponseEntity.ok(application);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteApplication(@PathVariable("id") long id) {
         // delete application
@@ -68,7 +62,7 @@ public class ApplicationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('CANDIDATE')")
+    @PreAuthorize("hasRole('ROLE_APPLICANT')")
     @PutMapping("/{id}")
     public ResponseEntity<Application> putApplication(@PathVariable("id") long id, @RequestBody ApplicationRequest applicationReq) {
         System.out.println(applicationReq);
