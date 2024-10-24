@@ -73,7 +73,7 @@ public class JobController {
         return jobService.getJob(id);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
         if (newJob.getJobTitle() == null && newJob.getJobDescription() == null) {
