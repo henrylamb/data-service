@@ -23,9 +23,9 @@ CREATE TABLE `JOB` (
 LOCK TABLES `JOB` WRITE;
 
 INSERT INTO `JOB`VALUES
-(1, 'Engineering', 'Software Engineer', CURRENT_TIMESTAMP, NULL, 'Software Engineer', 'Develop and maintain software applications.', 'Remote work available.', 'Open', 'Senior', 'resume1.pdf', 'cover_letter1.pdf'),
-(2, 'Marketing', 'Marketing Specialist', CURRENT_TIMESTAMP, NULL, 'Marketing Specialist', 'Assist in marketing campaigns.', 'Experience in digital marketing preferred.', 'Open', 'Mid-level', 'resume2.pdf', 'cover_letter2.pdf'),
-(3, 'Sales', 'Sales Associate', CURRENT_TIMESTAMP, NULL, 'Sales Associate', 'Manage customer accounts and sales.', 'Strong communication skills required.', 'Open', 'Entry-level', 'resume3.pdf', 'cover_letter3.pdf');
+(1, 1, 'Engineering', 'Software Engineer', CURRENT_TIMESTAMP, NULL, 'Software Engineer', 'Develop and maintain software applications.', 'Remote work available.', 'Open', 'Senior', 'resume1.pdf', 'cover_letter1.pdf'),
+(2, 1, 'Marketing', 'Marketing Specialist', CURRENT_TIMESTAMP, NULL, 'Marketing Specialist', 'Assist in marketing campaigns.', 'Experience in digital marketing preferred.', 'Open', 'Mid-level', 'resume2.pdf', 'cover_letter2.pdf'),
+(3, 1, 'Sales', 'Sales Associate', CURRENT_TIMESTAMP, NULL, 'Sales Associate', 'Manage customer accounts and sales.', 'Strong communication skills required.', 'Open', 'Entry-level', 'resume3.pdf', 'cover_letter3.pdf');
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `APPLICATION`;
@@ -56,9 +56,9 @@ CREATE TABLE `APPLICATION` (
 LOCK TABLES `APPLICATION` WRITE;
 
 INSERT INTO `APPLICATION` VALUES
-(101, 'candidate1@example.com', 1, CURRENT_TIMESTAMP, 'Applied', 5, 85, 80, 90, 75, 70, 80, 0, '80', 'Strong candidate with relevant experience.'),
-(102, 'candidate2@example.com', 1, CURRENT_TIMESTAMP, 'Interviewed', 4, 70, 65, 80, 60, 75, 70, 0, '70', 'Good fit for the role.'),
-(103, 'candidate3@example.com', 2, CURRENT_TIMESTAMP, 'Applied', 3, 65, 60, 75, 80, 50, 65, 1, '70', 'Solid background in marketing.'),
-(104, 'candidate4@example.com', 3, CURRENT_TIMESTAMP, 'Rejected', 2, 50, 55, 60, 70, 45, 55, 2, '55', 'Needs more experience.');
+(101, 3, 'candidate1@example.com', 1, CURRENT_TIMESTAMP, 'Applied', 5, 85, 80, 90, 75, 70, 80, 0, '80', 'Strong candidate with relevant experience.', 'resume1.pdf', 'cover_letter1.pdf'),
+(102, 3, 'candidate2@example.com', 1, CURRENT_TIMESTAMP, 'Interviewed', 4, 70, 65, 80, 60, 75, 70, 0, '70', 'Good fit for the role.', 'resume1.pdf', 'cover_letter1.pdf'),
+(103, 3, 'candidate3@example.com', 2, CURRENT_TIMESTAMP, 'Applied', 3, 65, 60, 75, 80, 50, 65, 1, '70', 'Solid background in marketing.', 'resume1.pdf', 'cover_letter1.pdf'),
+(104, 3, 'candidate4@example.com', 3, CURRENT_TIMESTAMP, 'Rejected', 2, 50, 55, 60, 70, 45, 55, 2, '55', 'Needs more experience.', 'resume1.pdf', 'cover_letter1.pdf');
 
 UNLOCK TABLES

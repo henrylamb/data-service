@@ -12,19 +12,17 @@ CREATE TABLE `USERS` (
   `RESUME` varchar(500) DEFAULT NULL,
   `DEPARTMENT` varchar(500) DEFAULT NULL,
   `ROLE` varchar(500) DEFAULT NULL,
-  `ADMIN_ID` int
+  `ADMIN_ID` int,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 LOCK TABLES `USERS` WRITE;
 
-INSERT INTO `USERS` VALUES
-('John doe', 'password', 'email@email.com', 'Suite 90', '692 743 4843', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.', 'Services', 'ROLE_CANDIDATE', 1),
-('Phelia Oles', 'mZ0)Anpz(MG', 'poles1@salon.com', 'PO Box 97110', '569 983 0739', 'Proin interdum mauris non ligula pellentesque ultrices.', 'Services', 'ROLE_CANDIDATE', 2),
-('manager', 'managerpass', 'manager@manager.com', '19th Floor', '679 512 3716', 'Praesent lectus. Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis. Duis consequat dui nec nisi volutpat eleifend.', 'Business Development', 'ROLE_MANAGER', 3),
-('Gardener Dax', 'uO4%8dM''Oo', 'gdax3@com.com', 'PO Box 2764', '713 790 1081', 'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo.', 'Marketing', 'ROLE_CANDIDATE', 4),
-('Katy Trounson', 'bO1%90qfg)jJ!', 'ktrounson4@360.cn', 'Suite 7', '773 696 6231', 'Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo.', 'Sales', 'ROLE_CANDIDATE', 5),
-('admin', 'adminpass', 'admin@admin.com', 'Suite 7', '773 696 6231', 'Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo.', 'Sales', 'ROLE_ADMIN', 5);
-
+INSERT INTO `USERS` (`FULL_NAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `PHONE`, `RESUME`, `DEPARTMENT`, `ROLE`, `ADMIN_ID`) VALUES
+('admin', 'password', 'admin@admin.com', '123 Elm St, Springfield', '555-1234', 'alice_resume.pdf', 'Engineering', 'admin', NULL),
+('Bob Smith', 'securepass456', 'bob.smith@example.com', '456 Oak St, Springfield', '555-5678', 'bob_resume.pdf', 'Engineering', 'hiring-manager', 1),
+('Charlie Brown', 'mypassword789', 'charlie.brown@example.com', '789 Pine St, Springfield', '555-8765', 'charlie_resume.pdf', 'Sales', 'applicant', 2),
+('Diana Prince', 'wonderpass111', 'diana.prince@example.com', '321 Maple St, Springfield', '555-4321', 'diana_resume.pdf', 'Marketing', 'applicant', 2),
+('Edward Kenway', 'assassinpass222', 'edward.kenway@example.com', '654 Cedar St, Springfield', '555-9999', 'edward_resume.pdf', 'Engineering', 'admin', NULL);
 
 UNLOCK TABLES;
