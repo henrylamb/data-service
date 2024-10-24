@@ -15,6 +15,8 @@ import com.adp.domain.Job;
 public interface JobRepository extends PagingAndSortingRepository<Job, Long>, CrudRepository<Job, Long> {
     void delete(Job job);
 
+    List<Job> findByUserId(Long userId);
+    Page<Job> findByUserId(Long userId, Pageable page);
     Page<Job> findByListingTitleContainingOrJobTitleContaining(String listingTitle, String jobTitle, Pageable page);
     Page<Job> findByListingTitleContainingIgnoreCaseOrJobTitleContainingIgnoreCase(String listingTitle, String jobTitle, Pageable page);
 }

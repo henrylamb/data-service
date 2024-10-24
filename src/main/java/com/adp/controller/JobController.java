@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.adp.domain.Job;
 import com.adp.domain.JobTransferRequest;
+import com.adp.dto.ManagerStatistics;
 import com.adp.service.JobService;
 
 import jakarta.annotation.security.PermitAll;
@@ -24,13 +25,83 @@ public class JobController {
     @Autowired
     JobService jobService;
 
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
+    @GetMapping("/manager/{managerId}/stats")
+    public ResponseEntity<?> getJobsByHiringManager(
+        @PathVariable Long managerId
+    ) {
+        List<Job> jobs = jobService.getJobsByUserId(managerId);
+        int totalJobs = jobs.size();
+        int openJobs = 0;
+        int closedJobs = 0;
+        int totalApplications = 0;
+        int pendingApplications = 0;
+        int reviewedApplications = 0;
+        int acceptedApplications = 0;
+        int rejectedApplications = 0;
+
+        for (Job job : jobs) {
+            if ("open".equalsIgnoreCase(job.getListingStatus())) {
+                openJobs++;
+            } else if ("closed".equalsIgnoreCase(job.getListingStatus())) {
+                closedJobs++;
+            }
+
+            List<Application> applications = job.getApplications();
+            totalApplications += applications.size();
+            for (Application application : applications) {
+                switch (application.getApplicationStatus().toLowerCase()) {
+                    case "pending":
+                        pendingApplications++;
+                        break;
+                    case "reviewed":
+                        reviewedApplications++;
+                        break;
+                    case "accepted":
+                        acceptedApplications++;
+                        break;
+                    case "rejected":
+                        rejectedApplications++;
+                        break;
+                }
+            }
+        }
+
+        ManagerStatistics stats = new ManagerStatistics(
+            totalJobs,
+            openJobs,
+            closedJobs,
+            totalApplications,
+            pendingApplications,
+            reviewedApplications,
+            acceptedApplications,
+            rejectedApplications,
+            pendingApplications, // pendingReviews is the same as pendingApplications
+            openJobs // openPositions is the same as openJobs
+        );
+
+        return ResponseEntity.ok(stats);
+    }
+
+
     // url: ../api/job?page=page&items=items
     // @PreAuthorize("permitAll()")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<Job>> getPaginatedJobs(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "items", defaultValue = "20") int items) {
-        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
+        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));  
+    }
+
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<Page<Job>> getJobsByHiringManager(
+        @PathVariable Long managerId,
+        @RequestParam int page,
+        @RequestParam int items
+    ) {
+        Page<Job> jobs = jobService.getJobByUserId(managerId, page, items);
+        return ResponseEntity.ok(jobs);
     }
 
     // url: ../api/job/{id}/applications
@@ -38,11 +109,8 @@ public class JobController {
     @GetMapping("/{id}/applications")
     public ResponseEntity<?> getApplications(@PathVariable(value = "id") Long id) {
         List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
-        if (applications.isEmpty()) {
-            return ResponseEntity.status(404).body("No applications found for the given job ID");
-        } else {
-            return ResponseEntity.ok(applications);
-        }
+        return ResponseEntity.ok(applications);
+        
     }
 
     // url: ../api/job/search?value=value&page=page&items=items all users
