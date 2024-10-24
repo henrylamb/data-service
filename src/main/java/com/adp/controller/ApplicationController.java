@@ -28,6 +28,13 @@ public class ApplicationController {
     @Autowired
     ApplicationGenerator applicationGenerator;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/")
+    public ResponseEntity<Iterable<Application>> all() {
+        Iterable<Application> applications = applicationService.all();
+        return ResponseEntity.ok(applications);
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_APPLICANT','ROLE_HIRING-MANAGER','ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {

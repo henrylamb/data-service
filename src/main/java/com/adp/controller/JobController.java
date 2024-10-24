@@ -75,7 +75,7 @@ public class JobController {
         return jobService.getJob(id);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
         System.out.println("New Job: " + newJob);
