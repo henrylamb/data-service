@@ -30,10 +30,8 @@ public class Application {
 
     private String candidateEmail;
 
-    @Getter(AccessLevel.NONE)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
-    @JsonIgnore
     private Job job;
 
     @Column(name = "date_applied")

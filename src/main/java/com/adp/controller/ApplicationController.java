@@ -133,7 +133,7 @@ public class ApplicationController {
     @PreAuthorize("hasRole('ROLE_APPLICANT')")
     @PostMapping
     public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
-        System.out.println(applicationReq);
+      System.out.println(applicationReq);
       Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
 
         Application application = applicationReq.convertToApplication();
