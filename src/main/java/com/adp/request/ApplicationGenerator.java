@@ -48,9 +48,10 @@ public class ApplicationGenerator {
 
         // Construct the prompt by combining the model and user resume and cover letter details
         String prompt = String.format(
-                "Model Resume:\n%s\n\nModel Cover Letter:\n%s\n\nUser Resume:\n%s\n\nUser Cover Letter:\n%s",
-                application.getJob().getModelResume(),
-                application.getJob().getModelCoverLetter(),
+                "Job Information: \n\n Job Title: %s \n\nJob Description:\n\n %s \n\n Years of experience: %s \n\n ----------- \n\n Applicant Resume/CV and Cover Letter:\n\n User Resume:\n%s\n\nUser Cover Letter:\n%s",
+                application.getJob().getJobTitle(),
+                application.getJob().getAdditionalInformation(),
+                application.getJob().getExperienceLevel(),
                 application.getCustomResume(),
                 application.getCoverLetter()
         );
