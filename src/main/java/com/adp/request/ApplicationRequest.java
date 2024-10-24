@@ -123,11 +123,11 @@ public class ApplicationRequest {
         this.extenuatingCircumstancesScore = extenuatingCircumstancesScore;
     }
 
-    public String getAverageScore() {
+    public Integer getAverageScore() {
         return averageScore;
     }
 
-    public void setAverageScore(String averageScore) {
+    public void setAverageScore(Integer averageScore) {
         this.averageScore = averageScore;
     }
 
@@ -146,7 +146,7 @@ public class ApplicationRequest {
     private Integer pedigreeScore;
     private Integer trajectoryScore;
     private Integer extenuatingCircumstancesScore;
-    private String averageScore;
+    private Integer averageScore;
     private String review;
 
     // Getters and Setters
