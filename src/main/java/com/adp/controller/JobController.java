@@ -109,11 +109,8 @@ public class JobController {
     @GetMapping("/{id}/applications")
     public ResponseEntity<?> getApplications(@PathVariable(value = "id") Long id) {
         List<Application> applications = jobService.getApplicationsOfGivenJobId(id);
-        if (applications.isEmpty()) {
-            return ResponseEntity.status(404).body("No applications found for the given job ID");
-        } else {
-            return ResponseEntity.ok(applications);
-        }
+        return ResponseEntity.ok(applications);
+        
     }
 
     // url: ../api/job/search?value=value&page=page&items=items all users
