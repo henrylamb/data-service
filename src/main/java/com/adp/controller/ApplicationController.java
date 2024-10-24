@@ -31,6 +31,9 @@ public class ApplicationController {
     @Autowired
     JobService jobService;
 
+    @Autowired
+    ApplicationGenerator applicationGenerator;
+
     @PreAuthorize("hasAnyRole('ROLE_APPLICANT','ROLE_HIRING-MANAGER','ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getApplicationById(@PathVariable("id") long id) {
@@ -132,7 +135,7 @@ public class ApplicationController {
     
     @PreAuthorize("hasRole('ROLE_APPLICANT')")
     @PostMapping
-    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
+    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) throws Exception {
         System.out.println(applicationReq);
       Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
 

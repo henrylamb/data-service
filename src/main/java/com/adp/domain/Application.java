@@ -77,6 +77,18 @@ public class Application {
         return job;
     }
 
+    public void setScores(Application applicationScores) {
+        this.yearsOfExperience = applicationScores.getYearsOfExperience();
+        this.matchJobDescriptionScore = applicationScores.getMatchJobDescriptionScore();
+        this.pastExperienceScore = applicationScores.getPastExperienceScore();
+        this.motivationScore = applicationScores.getMotivationScore();
+        this.academicAchievementScore = applicationScores.getAcademicAchievementScore();
+        this.pedigreeScore = applicationScores.getPedigreeScore();
+        this.trajectoryScore = applicationScores.getTrajectoryScore();
+        this.extenuatingCircumstancesScore = applicationScores.getExtenuatingCircumstancesScore();
+        this.averageScore = applicationScores.getAverageScore();
+    }
+
     public void statisticsOnly(){
         this.customResume = null;
         this.coverLetter = null;

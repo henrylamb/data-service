@@ -166,7 +166,7 @@ public class ApplicationRequest {
         application.setPedigreeScore(this.pedigreeScore);
         application.setTrajectoryScore(this.trajectoryScore);
         application.setExtenuatingCircumstancesScore(this.extenuatingCircumstancesScore);
-        application.setAverageScore(this.averageScore);
+        application.setAverageScore(String.valueOf(this.averageScore));
         application.setReview(this.review);
         return application;
     }
