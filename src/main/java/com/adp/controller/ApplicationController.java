@@ -140,8 +140,6 @@ public class ApplicationController {
             Job job = jobOptional.get();
             application.setJob(job);
         } else {
-            // Handle the case where the job is not found
-            // For example, you might want to throw an exception or return an error response
             System.out.println("Job not found");
             return ResponseEntity.badRequest().build();
         }
@@ -149,8 +147,6 @@ public class ApplicationController {
          if (!isApplicationValid(application)) {
             return ResponseEntity.badRequest().build();
          }
-
-         //TODO get generate the information needed for the application
          Application applicationScores = applicationGenerator.sendApplication(application);
 
          application.setScores(applicationScores);
