@@ -30,7 +30,18 @@ public class JobController {
     public ResponseEntity<Page<Job>> getPaginatedJobs(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "items", defaultValue = "20") int items) {
-        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));
+        return ResponseEntity.ok(jobService.getPaginatedJobs(page, items));  
+    }
+
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<Page<Job>> getJobsByHiringManager(
+        @PathVariable Long managerId,
+        @RequestParam int page,
+        @RequestParam int items
+    ) {
+        Page<Job> jobs = jobService.getJobByUserId(managerId, page, items);
+        return ResponseEntity.ok(jobs);
     }
 
     // url: ../api/job/{id}/applications

@@ -22,6 +22,11 @@ public class JobService {
     @Autowired
     JobRepository repo;
 
+    public Page<Job> getJobByUserId(Long userId, int pageNumber, int size) {
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return repo.findByUserId(userId, pageable);
+    }
+
     public List<Application> getApplicationsOfGivenJobId(Long jobId) {
         Optional<Job> job = repo.findById(jobId);
         List<Application> returnList = new ArrayList<>();

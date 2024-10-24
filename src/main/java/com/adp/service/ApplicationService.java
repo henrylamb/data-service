@@ -23,6 +23,11 @@ public class ApplicationService {
         return repo.findAll();
     }
 
+    public Page<Application> getApplicationsByUserId(Long userId, int pageNumber, int size) {
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return repo.findByCandidateId(userId, pageable);
+    }
+
     public Optional<Application> getApplication(long id) {
         return repo.findById(id);
     }

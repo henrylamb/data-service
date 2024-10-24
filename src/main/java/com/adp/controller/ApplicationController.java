@@ -155,6 +155,17 @@ public class ApplicationController {
         return ResponseEntity.status(201).body(application);
 }
 
+    @PreAuthorize("hasAnyRole('ROLE_APPLICANT','ROLE_HIRING-MANAGER','ROLE_ADMIN')")
+    @GetMapping("/candidate/{candidateId}")
+    public ResponseEntity<Page<Application>> getApplications(
+        @PathVariable Long candidateId,
+        @RequestParam("page") int page,
+        @RequestParam("items") int items) {
+            Page<Application> applications
+            = applicationService.getApplicationsByUserId(candidateId, page, items);
+            return ResponseEntity.ok(applications);
+        }
+
 
 private boolean isApplicationValid(Application application) {
     // return application.getJobId() != null && application.getCandidateEmail() != null 
