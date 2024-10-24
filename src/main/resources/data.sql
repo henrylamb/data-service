@@ -10,5 +10,5 @@ INSERT INTO APPLICATION (candidate_id, candidate_email, job_id, date_applied, ap
  VALUES
 (101, 'candidate1@example.com', 1, CURRENT_TIMESTAMP, 'Applied', 5, 85, 80, 90, 75, 70, 80, 0, '80', 'Strong candidate with relevant experience.'),
 (102, 'candidate2@example.com', 1, CURRENT_TIMESTAMP, 'Interviewed', 4, 70, 65, 80, 60, 75, 70, 0, '70', 'Good fit for the role.'),
- (103, 'candidate3@example.com', 2, CURRENT_TIMESTAMP, 'Applied', 3, 65, 60, 75, 80, 50, 65, 1, '70', 'Solid background in marketing.'),
- (104, 'candidate4@example.com', 3, CURRENT_TIMESTAMP, 'Rejected', 2, 50, 55, 60, 70, 45, 55, 2, '55', 'Needs more experience.');
+(103, 'candidate3@example.com', 2, CURRENT_TIMESTAMP, 'Applied', 3, 65, 60, 75, 80, 50, 65, 1, '70', 'Solid background in marketing.'),
+(104, 'candidate4@example.com', 3, CURRENT_TIMESTAMP, 'Rejected', 2, 50, 55, 60, 70, 45, 55, 2, '55', 'Needs more experience.');
