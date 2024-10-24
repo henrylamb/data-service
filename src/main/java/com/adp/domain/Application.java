@@ -1,5 +1,6 @@
 package com.adp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Application {
     @Getter(AccessLevel.NONE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Job job;
 
     @Column(name = "date_applied", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -70,10 +72,8 @@ public class Application {
     @Column(name = "review", columnDefinition = "LONGTEXT")
     private String review;
 
-    public Application(int i, String mail, Long id, String applied, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, String s) {
-    }
-
-    public Application() {
+    public Job getJob() {
+        return job;
     }
 
     public void statisticsOnly(){
