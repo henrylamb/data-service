@@ -5,6 +5,7 @@ import java.security.interfaces.RSAPublicKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,10 +33,12 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-          .requestMatchers("/job/page").permitAll()
-          .requestMatchers("/job/{id}").permitAll()
-          .requestMatchers("/job").permitAll()
+          // .requestMatchers("/job/page").permitAll()
+          // .requestMatchers("/job/{id}").permitAll()
           .requestMatchers("/").permitAll()
+          .requestMatchers("/job").permitAll()
+          .requestMatchers("/job/*").permitAll() // Allow only GET requests to /job/{id}
+          .requestMatchers("/job/*/*").authenticated() // Require authentication for sub-paths like delete
             .anyRequest().authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
             .decoder(JWTHelper.jwtDecoder(publicKey)) // Use NimbusJwtDecoder with public key
