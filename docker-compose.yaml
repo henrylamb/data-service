@@ -1,11 +1,4 @@
 services:
-  job-application-service:
-    build: .
-    ports:
-      - "8000:8000"
-    networks:
-      - app-network
-
   object-gen:
     image: henrylamb/generation-on-rails:latest
     ports:
@@ -27,12 +20,4 @@ services:
       GRPC_UNSECURE: ${GRPC_UNSECURE}
       CERT_FILE: ${CERT_FILE}
       KEY_FILE: ${KEY_FILE}
-    networks:
-      - app-network
 
-volumes:
-  mysql_data1:
-
-networks:
-  app-network:
-    driver: bridge
