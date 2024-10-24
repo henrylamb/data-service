@@ -71,17 +71,24 @@ public class JobController {
     @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public Optional<Job> getJob(@PathVariable("id") long id) {
+        Optional<Job> job = jobService.getJob(id);
+
         return jobService.getJob(id);
     }
 
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
     public ResponseEntity<?> addJob(@RequestBody Job newJob) {
-        if (newJob.getJobTitle() == null && newJob.getJobDescription() == null) {
+        System.out.println("New Job: " + newJob);
+
+        if (!isJobCreateValid(newJob)) {
             return ResponseEntity.badRequest().build();
         }
 
         URI location = jobService.saveJob(newJob);
+
+        System.out.println("Location: " + location);
+
 
         return ResponseEntity.created(location).body(newJob);
     }
@@ -134,5 +141,9 @@ public class JobController {
 
     private boolean isJobValid(Job job) {
         return job.getId() != null && job.getJobTitle() != null && job.getJobDescription() != null;
+    }
+
+    private boolean isJobCreateValid(Job job) {
+        return  job.getJobTitle() != null && job.getJobDescription() != null;
     }
 }

@@ -1,16 +1,17 @@
 package com.adp.controller;
 
-import com.adp.domain.Application;
-import com.adp.domain.Job;
-import com.adp.request.ApplicationRequest;
-import com.adp.service.ApplicationService;
-
 import java.util.Optional;
 
-import com.adp.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+
+import com.adp.domain.Application;
+import com.adp.domain.Job;
+import com.adp.request.ApplicationGenerator;
+import com.adp.request.ApplicationRequest;
+import com.adp.service.ApplicationService;
+import com.adp.service.JobService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,10 @@ public class ApplicationController {
 
     @Autowired
     JobService jobService;
+
+    @Autowired
+    ApplicationGenerator applicationGenerator;
+
 
     @PreAuthorize("hasRole('CANDIDATE')")
     @GetMapping("/{id}")
@@ -125,7 +130,7 @@ public class ApplicationController {
     
     @PreAuthorize("hasRole('CANDIDATE')")
     @PostMapping
-    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) {
+    public ResponseEntity<Application> addApplication(@RequestBody ApplicationRequest applicationReq) throws Exception {
         System.out.println(applicationReq);
       Optional<Job> jobOptional = jobService.getJob(applicationReq.getJobId());
 
@@ -137,12 +142,18 @@ public class ApplicationController {
         } else {
             // Handle the case where the job is not found
             // For example, you might want to throw an exception or return an error response
+            System.out.println("Job not found");
             return ResponseEntity.badRequest().build();
         }
 
          if (!isApplicationValid(application)) {
             return ResponseEntity.badRequest().build();
          }
+
+         //TODO get generate the information needed for the application
+         Application applicationScores = applicationGenerator.sendApplication(application);
+
+         application.setScores(applicationScores);
 
         applicationService.saveApplication(application);
         return ResponseEntity.status(201).body(application);
