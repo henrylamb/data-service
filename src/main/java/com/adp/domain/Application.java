@@ -28,6 +28,7 @@ public class Application {
 
     private Long candidateId;
 
+    @Column(name = "candidate_email")
     private String candidateEmail;
 
     @ManyToOne(fetch = FetchType.EAGER)
