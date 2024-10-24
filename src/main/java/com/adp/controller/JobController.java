@@ -25,7 +25,7 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-    // @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
+    @PreAuthorize("hasRole('ROLE_HIRING-MANAGER')")
     @GetMapping("/manager/{managerId}/stats")
     public ResponseEntity<?> getJobsByHiringManager(
         @PathVariable Long managerId
